@@ -40,7 +40,8 @@ void Thread::Death()
     pthread_exit(NULL);
 }
 
-void Thread::WaitingDead()
+void Thread::Wait(int time)
 {
-
+    std::chrono::milliseconds dura(time);
+    std::this_thread::sleep_for(dura);
 }

@@ -9,6 +9,8 @@
 #include "pthread.h"
 #include <string>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 class Thread {
     public:
@@ -17,8 +19,8 @@ class Thread {
 
         bool Status();
         void StartThread(void *(*)(void *), void *);
-        void WaitingDead();
         void JoinThread(void *status);
+        void Wait(int);
         void Death();
 
     protected:
