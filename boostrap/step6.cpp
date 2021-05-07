@@ -14,7 +14,7 @@ void *producer(void *queue)
 {
     srand(time(NULL));
     while (1) {
-        reinterpret_cast<SafeQueue &> (queue).push(rand() % 500);
+        (SafeQueue) (queue).push(rand() % 500);
     }
     pthread_exit(NULL);
 }
