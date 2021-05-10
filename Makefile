@@ -18,6 +18,8 @@ TEST_BIN	=	unit_tests
 
 RECEP_FILES	=	Reception.cpp			\
 
+PIZZA_FILES	=	Pizza.cpp				\
+
 TEST_FILES	=	MyUnitTests.cpp			\
 
 #######################################
@@ -28,6 +30,7 @@ TEST_FILES	=	MyUnitTests.cpp			\
 MAIN		=	Main.cpp
 
 SRC			=	$(addprefix src/Reception/, $(RECEP_FILES))		\
+				$(addprefix src/Pizza/, $(PIZZA_FILES))			\
 
 TESTS		=	$(addprefix tests/, $(TEST_FILES))		\
 
@@ -51,7 +54,7 @@ DBGFLAGS	=	-k8 -g3 -ggdb
 
 LDFLAGS		=
 
-INCLUDE		=	-iquote ./src/Reception/
+INCLUDE		=	-iquote ./src/Reception/ -iquote ./src/Pizza/
 
 #######################################
 

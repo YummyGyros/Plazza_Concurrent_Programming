@@ -35,7 +35,9 @@ int main(int ac, char **av)
         return 84;
     }
     try {
+        std::string tmp;
         Reception recep(av);
+        recep.takeOrders();
     } catch (std::invalid_argument &e) {
         std::cerr << "error from function " << e.what() << ": at least one argument is in invalid." << std::endl << std::endl;
         usage(std::cerr);
