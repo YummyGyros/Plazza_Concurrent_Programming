@@ -1,53 +1,96 @@
 ##
-## EPITECH PROJECT, 2021
-## nanotekspice
-## File description:
+## EPITECH PROJECT, 2019
 ## Makefile
+## File description:
+## Vm makefile
 ##
 
-SRC	=\
+## USEFUL DEF ########################
+
+CC			=	g++
+RM			=	-rm -f
+BIN			=	plazza
+TEST_BIN	=	unit_tests
+
+#######################################
+
+## FILES ##############################
+
+SRC_FILES	=				\
+
+TEST_FILES		=	MyUnitTests.cpp			\
+
+#######################################
 
 
-MAIN	=\
+## SOURCES ############################
 
-TESTS	=	
+MAIN		=	Main.cpp
 
-CXXFLAGS	=	-Wall -Wextra -lpthread\
+SRC			=	$(addprefix src/, $(SRC_FILES))		\
 
-CPPFLAGS	=	-iquote./ -iquote..
+TESTS		=	$(addprefix tests/, $(TEST_FILES))		\
 
-OBJ	=	$(SRC:.cpp=.o) $(MAIN:.cpp=.o)
+#######################################
 
-CRITERION	=	-l criterion --coverage
+## OBJ ################################
 
-NAME	=	plazza
+MAIN_OBJ	=	$(MAIN:.cpp=.o)
 
-UNIT	=	unit_tests
+SRC_OBJ		=	$(SRC:.cpp=.o)
 
-CC	=	g++
+TESTS_OBJ	=	$(TESTS:.cpp=.o)
 
-all:	$(NAME)
+#######################################
 
-$(NAME):	$(OBJ)
-	$(CC) $(OBJ) $(CXXFLAGS) -o $(NAME) --std=c++17
+## FLAGS ##############################
 
+CPPFLAGS	=	-W -Wall -Wextra -Werror
+
+DBGFLAGS	=	-k8 -g3 -ggdb
+
+LDFLAGS		=
+
+INCLUDE		=	-iquote./include
+
+#######################################
+
+## RULES ##############################
+
+all : $(BIN)
+
+$(BIN): $(MAIN_OBJ) $(SRC_OBJ)
+	$(CC) -o $(BIN) $(MAIN_OBJ) $(SRC_OBJ) $(CFLAGS) $(LDFLAGS) $(INCLUDE)
+
+## Clear
 clean:
-	$(RM) $(OBJ)
+	@$(RM) $(MAIN_OBJ)
+	@$(RM) $(SRC_OBJ)
+	@$(RM) $(TESTS_OBJ)
+	@$(RM) Makefile~
+	@$(RM) src/**/*.gc*
+	@$(RM) src/*.gc*
+	@$(RM) tests/*.gc*
 
-fclean:	clean
-	$(RM) $(NAME)
+fclean: clean
+	@$(RM) $(BIN)
+	@$(RM) $(TEST_BIN)
 
-clean_test:
-	$(RM) *.gcda *.gcno
+## GCOVR NEEDS:
+%.o:    %.cpp
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-fclean_test: clean_test
-	$(RM) $(UNIT)
+re: fclean clean all
 
-debug: CPPFLAGS += -g3 -ggdb
-debug: $(NAME)
+tests_run:  CFLAGS += --coverage
+tests_run:  LDFLAGS += -lcriterion -DUNIT_TEST
+tests_run:	$(TESTS_OBJ) $(SRC_OBJ)
+	$(CC) -o $(TEST_BIN) $(TESTS_OBJ) $(SRC_OBJ) $(CFLAGS) $(LDFLAGS) $(INCLUDE)
+	-./$(TEST_BIN)
+	gcovr -b --exclude-directories tests
+	gcovr -r . --exclude-directories tests
+	@$(RM) $(TEST_BIN)
 
-re:	fclean	all
+.PHONY: all $(BIN) clean fclean re tests_run
 
-tests_run: fclean_test
-	$(CC) $(SRC) $(TESTS) $(CXXFLAGS) $(CRITERION) -o $(UNIT) $(CPPFLAGS)
-	./$(UNIT)
+#######################################
