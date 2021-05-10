@@ -16,9 +16,9 @@ TEST_BIN	=	unit_tests
 
 ## FILES ##############################
 
-SRC_FILES	=				\
+SRC_FILES	=	Reception.cpp			\
 
-TEST_FILES		=	MyUnitTests.cpp			\
+TEST_FILES	=	MyUnitTests.cpp			\
 
 #######################################
 
@@ -51,7 +51,7 @@ DBGFLAGS	=	-k8 -g3 -ggdb
 
 LDFLAGS		=
 
-INCLUDE		=	-iquote./include
+INCLUDE		=	-iquote ./src/
 
 #######################################
 
@@ -60,7 +60,7 @@ INCLUDE		=	-iquote./include
 all : $(BIN)
 
 $(BIN): $(MAIN_OBJ) $(SRC_OBJ)
-	$(CC) -o $(BIN) $(MAIN_OBJ) $(SRC_OBJ) $(CFLAGS) $(LDFLAGS) $(INCLUDE)
+	$(CC) -o $(BIN) $(MAIN_OBJ) $(SRC_OBJ) $(CFLAGS) $(LDFLAGS)
 
 ## Clear
 clean:
@@ -78,7 +78,7 @@ fclean: clean
 
 ## GCOVR NEEDS:
 %.o:    %.cpp
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
 
 re: fclean clean all
 

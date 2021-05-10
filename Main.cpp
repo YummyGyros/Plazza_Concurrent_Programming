@@ -24,10 +24,11 @@ void usage()
 
 int main(int ac, char **av)
 {
-    if (ac == 2 && (std::string(av[1]) == "-h" || std::string(av[1]) == "--help")) {
-        usage();
-        return 0;
-    }
+    if (ac == 2)
+        if (std::string(av[1]) == "-h" || std::string(av[1]) == "--help") {
+            usage();
+            return 0;
+        }
     if (ac != 4) {
         usage();
         return 84;
