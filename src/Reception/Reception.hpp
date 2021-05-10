@@ -12,14 +12,17 @@
 
 class Reception {
     public:
-        Reception();
+        Reception(char **av);
         ~Reception();
 
+        float getTimeMultiplier() const;
+        std::size_t getCooksPerKitchen() const;
+        std::size_t getRestockTime() const;
     protected:
     private:
-        float timeMultiplier;
-        std::size_t cooks1Kitchen;
-        std::size_t restockTime;
+        float _timeMultiplier;
+        std::size_t _cooksPerKitchen;
+        std::size_t _restockTime;
 };
 
 #endif /* !RECEPTION_HPP_ */

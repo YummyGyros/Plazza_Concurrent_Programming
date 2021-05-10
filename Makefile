@@ -16,7 +16,7 @@ TEST_BIN	=	unit_tests
 
 ## FILES ##############################
 
-SRC_FILES	=	Reception.cpp			\
+RECEP_FILES	=	Reception.cpp			\
 
 TEST_FILES	=	MyUnitTests.cpp			\
 
@@ -27,7 +27,7 @@ TEST_FILES	=	MyUnitTests.cpp			\
 
 MAIN		=	Main.cpp
 
-SRC			=	$(addprefix src/, $(SRC_FILES))		\
+SRC			=	$(addprefix src/Reception/, $(RECEP_FILES))		\
 
 TESTS		=	$(addprefix tests/, $(TEST_FILES))		\
 
@@ -51,7 +51,7 @@ DBGFLAGS	=	-k8 -g3 -ggdb
 
 LDFLAGS		=
 
-INCLUDE		=	-iquote ./src/
+INCLUDE		=	-iquote ./src/Reception/
 
 #######################################
 
