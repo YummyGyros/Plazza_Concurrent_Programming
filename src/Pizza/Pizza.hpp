@@ -17,6 +17,8 @@ class Pizza {
         Pizza() = default;
         ~Pizza() = default;
 
+        void setPizzaType(const PizzaType type);
+        void setPizzaSize(const PizzaSize size);
         PizzaType getPizzaType() const;
         PizzaSize getPizzaSize() const;
     protected:

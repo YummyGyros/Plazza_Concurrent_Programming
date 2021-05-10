@@ -51,7 +51,6 @@ std::vector<Pizza> Reception::parseOrder(const std::string &line)
     std::string segment;
     std::vector<Pizza> pizze;
 
-    std::cout << line << std::endl;
     while (std::getline(stream, segment, ';')) {
         parsePizza(segment);
     }
@@ -64,9 +63,19 @@ Pizza Reception::parsePizza(const std::string &segment)
     std::stringstream stream(segment);
     Pizza pizza;
 
-    while (std::getline(stream, tmp, ' ')) {
-        std::cout << "portion: " << tmp << std::endl;
-        //parse every bit into a pizza here.
-    }
+    stream >> tmp;
+    // std::cout << "first parse: " << tmp << std::endl;
+    if (pizzaTypes.find(tmp) != pizzaTypes.end())
+        pizza.setPizzaType(pizzaTypes.find(tmp)->second);
+    stream >> tmp;
+    // std::cout << "second parse: " << tmp << std::endl;
+    if (pizzaSizes.find(tmp) != pizzaSizes.end())
+        pizza.setPizzaSize(pizzaSizes.find(tmp)->second);
+    stream >> tmp;
+    // std::cout << "third parse: " << tmp << std::endl;
+    std::cout << "Pizza:\n\ttype: " << pizza.getPizzaType() << "\n\tsize: " << pizza.getPizzaSize() << std::endl;
+
+    //parse last param
+    //what do we do when pizza is invalid? bool in class? return null somehow?
     return pizza;
 }
