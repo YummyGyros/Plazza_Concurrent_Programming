@@ -18,7 +18,7 @@ class Reception {
         Reception(char **av);
         ~Reception();
 
-        void takeOrders();
+        void start();
         void manageOrder(const std::string &line);
         void displayStatus();
 

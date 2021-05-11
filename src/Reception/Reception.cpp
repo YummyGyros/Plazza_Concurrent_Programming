@@ -37,7 +37,7 @@ std::size_t Reception::getRestockTime() const
     return _restockTime;
 }
 
-void Reception::takeOrders()
+void Reception::start()
 {
     std::string line;
 
@@ -49,9 +49,12 @@ void Reception::takeOrders()
     }
 }
 
+// hésitez pas à enlever cette fonction si jamais vous avez besoin de faire vos trucs dans start directement
 void Reception::manageOrder(const std::string &line)
 {
-    parseOrder(line);
+    std::vector<Pizza> pizze = parseOrder(line);
+    // for (auto const &pizza : pizze)
+        // std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
 }
 
 void Reception::displayStatus()
