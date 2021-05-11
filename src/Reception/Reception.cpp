@@ -57,11 +57,27 @@ std::vector<Pizza> Reception::parseOrder(const std::string &line)
     return pizze;
 }
 
+int checkLastArg(std::string &tmp)
+{
+    if (tmp.length() < 2)
+        return -1;
+    if (tmp[0] != 'x')
+        return -1;
+    if (tmp[1] < '1' || tmp[1] > '9')
+        return -1;
+    for (int i = 1; tmp[i]; i++)
+        if (tmp[i] < '0' || tmp[i] > '9')
+            return -1;
+    tmp.replace(0, 1, "0");
+    return stod(tmp);
+}
+
 Pizza Reception::parsePizza(const std::string &segment)
 {
     std::string tmp;
     std::stringstream stream(segment);
     Pizza pizza;
+    int quantity;
 
     stream >> tmp;
     // std::cout << "first parse: " << tmp << std::endl;
@@ -72,9 +88,10 @@ Pizza Reception::parsePizza(const std::string &segment)
     if (pizzaSizes.find(tmp) != pizzaSizes.end())
         pizza.setPizzaSize(pizzaSizes.find(tmp)->second);
     stream >> tmp;
+    quantity = checkLastArg(tmp);
     // std::cout << "third parse: " << tmp << std::endl;
-    std::cout << "Pizza:\n\ttype: " << pizza.getPizzaType() << "\n\tsize: " << pizza.getPizzaSize() << std::endl;
 
+    std::cout << "Pizza:\n\ttype: " << pizza.getPizzaType() << "\n\tsize: " << pizza.getPizzaSize() << std::endl << "\tquantity: " << quantity << std::endl;
     //parse last param
     //what do we do when pizza is invalid? bool in class? return null somehow?
     return pizza;
