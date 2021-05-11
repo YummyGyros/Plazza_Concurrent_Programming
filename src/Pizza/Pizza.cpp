@@ -7,6 +7,16 @@
 
 #include "Pizza.hpp"
 
+Pizza::Pizza()
+{
+}
+
+Pizza::Pizza(const Pizza &pizza)
+{
+    this->_size = pizza._size;
+    this->_type = pizza._type;
+}
+
 void Pizza::setPizzaType(const PizzaType type)
 {
     _type = type;

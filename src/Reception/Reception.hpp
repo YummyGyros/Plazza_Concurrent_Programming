@@ -26,8 +26,9 @@ class Reception {
 
     protected:
     private:
+        int checkLastArg(std::string &tmp);
         std::vector<Pizza> parseOrder(const std::string &line);
-        Pizza parsePizza(const std::string &segment);
+        std::vector<Pizza> parsePizza(const std::string &segment);
 
         float _timeMultiplier;
         std::size_t _cooksPerKitchen;

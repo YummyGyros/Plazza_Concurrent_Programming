@@ -6,6 +6,7 @@
 */
 
 #include "Reception.hpp"
+#include "PizzaError.hpp"
 #include <iostream>
 
 const std::string USAGE = "USAGE\n"
@@ -38,8 +39,11 @@ int main(int ac, char **av)
         std::string tmp;
         Reception recep(av);
         recep.takeOrders();
+    } catch (Error &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
     } catch (std::invalid_argument &e) {
-        std::cerr << "error from function " << e.what() << ": at least one argument is in invalid." << std::endl << std::endl;
+        std::cerr << "error from function " << e.what() << ": at least one argument is invalid." << std::endl << std::endl;
         usage(std::cerr);
         return 84;
     }

@@ -6,6 +6,7 @@
 */
 
 #include "Reception.hpp"
+#include "PizzaError.hpp"
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -52,12 +53,13 @@ std::vector<Pizza> Reception::parseOrder(const std::string &line)
     std::vector<Pizza> pizze;
 
     while (std::getline(stream, segment, ';')) {
-        parsePizza(segment);
+        for (const auto &pizza: parsePizza(segment))
+            pizze.push_back(pizza);
     }
     return pizze;
 }
 
-int checkLastArg(std::string &tmp)
+int Reception::checkLastArg(std::string &tmp)
 {
     if (tmp.length() < 2)
         return -1;
@@ -72,27 +74,31 @@ int checkLastArg(std::string &tmp)
     return stod(tmp);
 }
 
-Pizza Reception::parsePizza(const std::string &segment)
+std::vector<Pizza> Reception::parsePizza(const std::string &segment)
 {
     std::string tmp;
     std::stringstream stream(segment);
     Pizza pizza;
+    std::vector<Pizza> pizze;
     int quantity;
 
     stream >> tmp;
-    // std::cout << "first parse: " << tmp << std::endl;
-    if (pizzaTypes.find(tmp) != pizzaTypes.end())
-        pizza.setPizzaType(pizzaTypes.find(tmp)->second);
-    stream >> tmp;
-    // std::cout << "second parse: " << tmp << std::endl;
-    if (pizzaSizes.find(tmp) != pizzaSizes.end())
-        pizza.setPizzaSize(pizzaSizes.find(tmp)->second);
-    stream >> tmp;
-    quantity = checkLastArg(tmp);
-    // std::cout << "third parse: " << tmp << std::endl;
+    if (pizzaTypes.find(tmp) == pizzaTypes.end())
+        throw PizzaError("size", tmp);
+    pizza.setPizzaType(pizzaTypes.find(tmp)->second);
 
-    std::cout << "Pizza:\n\ttype: " << pizza.getPizzaType() << "\n\tsize: " << pizza.getPizzaSize() << std::endl << "\tquantity: " << quantity << std::endl;
-    //parse last param
-    //what do we do when pizza is invalid? bool in class? return null somehow?
-    return pizza;
+    stream >> tmp;
+    if (pizzaSizes.find(tmp) == pizzaSizes.end())
+        throw PizzaError("type", tmp);
+    pizza.setPizzaSize(pizzaSizes.find(tmp)->second);
+
+    stream >> tmp;
+    if ((quantity = checkLastArg(tmp)) == -1)
+        throw PizzaError("quantity", tmp);
+
+    for (int i = 0; i < quantity; i++) {
+        Pizza tmp(pizza);
+        pizze.push_back(tmp);
+    }
+    return pizze;
 }
