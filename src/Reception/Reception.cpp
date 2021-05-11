@@ -42,8 +42,21 @@ void Reception::takeOrders()
     std::string line;
 
     while (std::getline(std::cin, line)) {
-        parseOrder(line);
+        if (line.compare("status") == 0)
+            displayStatus();
+        else
+            manageOrder(line);
     }
+}
+
+void Reception::manageOrder(const std::string &line)
+{
+    parseOrder(line);
+}
+
+void Reception::displayStatus()
+{
+    std::cout << "Status information should be displayed here." << std::endl;
 }
 
 std::vector<Pizza> Reception::parseOrder(const std::string &line)
@@ -52,10 +65,9 @@ std::vector<Pizza> Reception::parseOrder(const std::string &line)
     std::string segment;
     std::vector<Pizza> pizze;
 
-    while (std::getline(stream, segment, ';')) {
+    while (std::getline(stream, segment, ';'))
         for (const auto &pizza: parsePizza(segment))
             pizze.push_back(pizza);
-    }
     return pizze;
 }
 

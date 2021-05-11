@@ -19,6 +19,8 @@ class Reception {
         ~Reception();
 
         void takeOrders();
+        void manageOrder(const std::string &line);
+        void displayStatus();
 
         float getTimeMultiplier() const;
         std::size_t getCooksPerKitchen() const;

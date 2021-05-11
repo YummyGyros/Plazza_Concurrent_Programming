@@ -23,6 +23,24 @@ void usage(std::ostream &stream)
     stream << USAGE << std::endl;
 }
 
+int launchShell(char **av)
+{
+    try {
+        Reception recep(av);
+        std::string line;
+
+        recep.takeOrders();
+    } catch (Error &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    } catch (std::invalid_argument &e) {
+        std::cerr << "error from function " << e.what() << ": at least one argument is invalid." << std::endl << std::endl;
+        usage(std::cerr);
+        return 84;
+    }
+    return 0;
+}
+
 int main(int ac, char **av)
 {
     if (ac == 2)
@@ -35,17 +53,5 @@ int main(int ac, char **av)
         usage(std::cerr);
         return 84;
     }
-    try {
-        std::string tmp;
-        Reception recep(av);
-        recep.takeOrders();
-    } catch (Error &e) {
-        std::cerr << e.what() << std::endl;
-        return 84;
-    } catch (std::invalid_argument &e) {
-        std::cerr << "error from function " << e.what() << ": at least one argument is invalid." << std::endl << std::endl;
-        usage(std::cerr);
-        return 84;
-    }
-    return 0;
+    return launchShell(av);
 }
