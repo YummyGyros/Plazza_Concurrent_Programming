@@ -16,6 +16,8 @@ TEST_BIN	=	unit_tests
 
 ## FILES ##############################
 
+COMMUNICATION_FILES	=	MessageQueue.cpp\
+
 RECEP_FILES	=	Reception.cpp			\
 
 PIZZA_FILES	=	Pizza.cpp				\
@@ -23,6 +25,7 @@ PIZZA_FILES	=	Pizza.cpp				\
 ERROR_FILES	=	Error.cpp				\
 				ParseError.cpp			\
 				PizzaError.cpp			\
+				CommunicationError.cpp	\
 
 TEST_FILES	=	MyUnitTests.cpp			\
 
@@ -36,6 +39,7 @@ MAIN		=	Main.cpp
 SRC			=	$(addprefix src/Reception/, $(RECEP_FILES))		\
 				$(addprefix src/Pizza/, $(PIZZA_FILES))			\
 				$(addprefix src/Error/, $(ERROR_FILES))			\
+				$(addprefix src/Communication/, $(COMMUNICATION_FILES))	\
 
 TESTS		=	$(addprefix tests/, $(TEST_FILES))		\
 
@@ -59,7 +63,7 @@ DBGFLAGS	=	-k8 -g3 -ggdb
 
 LDFLAGS		=
 
-INCLUDE		=	-iquote ./src/Reception/ -iquote ./src/Pizza/ -iquote ./src/Error/
+INCLUDE		=	-iquote ./src/Reception/ -iquote ./src/Pizza/ -iquote ./src/Error/ -iquote ./src/Communication/
 
 #######################################
 

@@ -10,7 +10,3 @@
 CommunicationError::CommunicationError(const std::string &desc) noexcept : Error("Communication: " + desc)
 {
 }
-
-CommunicationError::~CommunicationError()
-{
-}
