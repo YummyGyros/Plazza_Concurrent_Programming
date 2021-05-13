@@ -71,7 +71,7 @@ CPPFLAGS	=	-W -Wall -Wextra -Werror
 
 DBGFLAGS	=	-k8 -g3 -ggdb
 
-LDFLAGS		=
+LDFLAGS		= -lpthread
 
 INCLUDE		=	-iquote ./src/Reception/ -iquote ./src/Pizza/ -iquote ./src/Error/ -iquote ./src/Communication/ -iquote ./src/kitchen/ -iquote ./src/kitchen/Thread/
 

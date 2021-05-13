@@ -7,11 +7,13 @@
 
 #pragma once
 
-#include "ThreadPool.hpp"
-#include "PizzaDefinitions.hpp"
 #include <map>
 #include <chrono>
 #include <vector>
+
+#include "SafeQueue.hpp"
+#include "ThreadPool.hpp"
+#include "PizzaDefinitions.hpp"
 
 enum ingredients_e
 {
@@ -52,4 +54,6 @@ class Kitchen {
 
         ThreadPool _threads;
         std::map<ingredients_e, std::size_t> _fridge;
+
+        SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
 };

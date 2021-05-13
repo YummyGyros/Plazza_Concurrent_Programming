@@ -20,7 +20,8 @@ Kitchen::Kitchen(float timeMul, std::size_t nbCooks, std::size_t restockTime)
         {chiefLove, 5}
     })
 {
-    ThreadPool _threads();
+    SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
+    ThreadPool _threads(_timeMul, _nbCooks, _queue);
 }
 
 Kitchen::~Kitchen()

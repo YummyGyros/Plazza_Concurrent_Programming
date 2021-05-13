@@ -41,7 +41,7 @@ class SafeQueue {
                 return false;
             std::unique_lock<std::mutex> lock(_mutexQueue, std::defer_lock);
             value = _queue.front();
-            _queue.erase(_queue.begin());
+            _queue.pop();
             _cv.notify_all();
             return true;
         };
