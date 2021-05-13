@@ -26,6 +26,12 @@ ERROR_FILES	=	Error.cpp				\
 				ParseError.cpp			\
 				PizzaError.cpp			\
 				CommunicationError.cpp	\
+				ProcessesError.cpp 		\
+
+KITCHEN_FILES =	Kitchen.cpp 			\
+				Processes.cpp 			\
+
+THREADPOOL_FILES =	ThreadPool.cpp 		\
 
 TEST_FILES	=	MyUnitTests.cpp			\
 
@@ -40,6 +46,8 @@ SRC			=	$(addprefix src/Reception/, $(RECEP_FILES))		\
 				$(addprefix src/Pizza/, $(PIZZA_FILES))			\
 				$(addprefix src/Error/, $(ERROR_FILES))			\
 				$(addprefix src/Communication/, $(COMMUNICATION_FILES))	\
+				$(addprefix src/kitchen/, $(KITCHEN_FILES))	\
+				$(addprefix src/kitchen/Thread/, $(THREADPOOL_FILES))	\
 
 TESTS		=	$(addprefix tests/, $(TEST_FILES))		\
 
@@ -63,7 +71,7 @@ DBGFLAGS	=	-k8 -g3 -ggdb
 
 LDFLAGS		=
 
-INCLUDE		=	-iquote ./src/Reception/ -iquote ./src/Pizza/ -iquote ./src/Error/ -iquote ./src/Communication/
+INCLUDE		=	-iquote ./src/Reception/ -iquote ./src/Pizza/ -iquote ./src/Error/ -iquote ./src/Communication/ -iquote ./src/kitchen/ -iquote ./src/kitchen/Thread/
 
 #######################################
 

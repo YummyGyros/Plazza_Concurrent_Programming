@@ -10,7 +10,3 @@
 ProcessesError::ProcessesError(const std::string &desc) noexcept : Error("Processes: " + desc)
 {
 }
-
-ProcessesError::~ProcessesError()
-{
-}

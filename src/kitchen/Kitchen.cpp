@@ -13,6 +13,7 @@ Kitchen::Kitchen(int maxCooks)
     ThreadPool _threads();
     _isAlive = true;
     _lifeTime = 5;
+    
 }
 
 Kitchen::~Kitchen()
