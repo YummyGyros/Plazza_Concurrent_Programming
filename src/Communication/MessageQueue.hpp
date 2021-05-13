@@ -16,6 +16,7 @@
 #include <sys/msg.h>
 #include <cstdlib>
 #include <ctime>
+#include <cstdio>
 #include "Pizza.hpp"
 #include "CommunicationError.hpp"
 
@@ -64,6 +65,7 @@ class MessageQueue {
     protected:
     private:
         int _msgid;
+        std::string _communicationFile;
 };
 
 #endif /* !MESSAGEQUEUE_HPP_ */
