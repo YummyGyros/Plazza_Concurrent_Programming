@@ -17,7 +17,11 @@ class Serializing {
         ~Serializing();
 
         pizza_order_t pack(Pizza pizza);
-        status_t pack(std::map<ingredients_e, int> stock);
+        status_t pack(std::map<ingredients_e, std::size_t> stock);
+
+        Pizza unpack(pizza_order_t pizza);
+        std::map<ingredients_e, std::size_t> unpack(status_t stock);
+
     protected:
     private:
 };
