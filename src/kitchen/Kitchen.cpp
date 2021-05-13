@@ -8,7 +8,7 @@
 #include "Kitchen.hpp"
 
 Kitchen::Kitchen(float timeMul, std::size_t nbCooks, std::size_t restockTime)
-    : _isAlive(true), _lifeTime(5), _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime),
+    : _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true), _lifeTime(5),
     _fridge({
         {tomato, 5},
         {gruyere, 5},
