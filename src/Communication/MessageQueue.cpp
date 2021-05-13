@@ -25,6 +25,11 @@ T MessageQueue::recvMsg()
     return pizza;
 }
 
+int MessageQueue::getMsgid()
+{
+    return _msgid;
+}
+
 MessageQueue::MessageQueue(const std::string &name)
 {
     key_t key = ftok(name.c_str(), 65);

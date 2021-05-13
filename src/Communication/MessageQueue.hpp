@@ -45,6 +45,8 @@ class MessageQueue {
         void sendMsg(T msg, int msgid);
         template<typename T>
         T recvMsg();
+
+        int getMsgid();
     protected:
     private:
         int _msgid;
