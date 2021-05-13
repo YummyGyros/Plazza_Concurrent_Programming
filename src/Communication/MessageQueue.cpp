@@ -12,14 +12,11 @@ int MessageQueue::getMsgid()
     return _msgid;
 }
 
-MessageQueue::MessageQueue()
+MessageQueue::MessageQueue(const std::string &name)
 {
     key_t key = 0;
-    int random_variable = 0;
 
-    std::srand(std::time(nullptr));
-    random_variable = std::rand()%100000;
-    _communicationFile = std::to_string(random_variable);
+    _communicationFile = name;
     if (std::fopen(_communicationFile.c_str(), "w") == nullptr)
         throw CommunicationError(_communicationFile + "Unable to create the Communication file.");
     key = ftok(_communicationFile.c_str(), 65);

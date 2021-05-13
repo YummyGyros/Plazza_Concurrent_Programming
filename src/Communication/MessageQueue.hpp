@@ -41,7 +41,7 @@ typedef struct status_s {
 
 class MessageQueue {
     public:
-        MessageQueue();
+        MessageQueue(const std::string &name);
         ~MessageQueue();
 
         template<typename T>
