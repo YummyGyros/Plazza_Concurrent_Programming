@@ -7,13 +7,12 @@
 
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(int maxCooks)
+Kitchen::Kitchen(float timeMultiplier, std::size_t cooksPerKitchen, std::size_t restockTime)
 {
     _maxCooks = maxCooks;
     ThreadPool _threads();
     _isAlive = true;
     _lifeTime = 5;
-    
 }
 
 Kitchen::~Kitchen()

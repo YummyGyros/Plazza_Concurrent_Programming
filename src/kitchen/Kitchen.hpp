@@ -53,5 +53,5 @@ class Kitchen {
         ThreadPool _threads;
         bool _isAlive;
         int _lifeTime;
-        int _maxCooks;
+        std::size_t _maxCooks;
 };
