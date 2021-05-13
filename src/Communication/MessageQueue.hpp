@@ -42,19 +42,9 @@ class MessageQueue {
         ~MessageQueue();
 
         template<typename T>
-        void sendMsg(T msg, int msgid) {
-            if (msgsnd(msgid, &msg, sizeof(T), 0) == -1)
-                throw CommunicationError("msgsnd failed.");
-        };
+        void sendMsg(T msg, int msgid);
         template<typename T>
-        T recvMsg() {
-            T pizza;
-
-            if (msgrcv(_msgid, &pizza, sizeof(T), 1, 0) == -1)
-                throw CommunicationError("msgrcv failed.");
-            std::cout << pizza.type << ": " << pizza.size << std::endl;
-            return pizza;
-        };
+        T recvMsg();
     protected:
     private:
         int _msgid;

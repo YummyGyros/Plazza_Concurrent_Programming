@@ -7,6 +7,24 @@
 
 #include "MessageQueue.hpp"
 
+template<typename T>
+void MessageQueue::sendMsg(T msg, int msgid)
+{
+    if (msgsnd(msgid, &msg, sizeof(T), 0) == -1)
+        throw CommunicationError("msgsnd failed.");
+}
+
+template<typename T>
+T MessageQueue::recvMsg()
+{
+    T pizza;
+
+    if (msgrcv(_msgid, &pizza, sizeof(T), 1, 0) == -1)
+        throw CommunicationError("msgrcv failed.");
+    std::cout << pizza.type << ": " << pizza.size << std::endl;
+    return pizza;
+}
+
 MessageQueue::MessageQueue(const std::string &name)
 {
     key_t key = ftok(name.c_str(), 65);
