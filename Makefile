@@ -32,6 +32,7 @@ KITCHEN_FILES =	Kitchen.cpp 			\
 				Processes.cpp 			\
 
 THREADPOOL_FILES =	ThreadPool.cpp 		\
+					SafeQueue.cpp 		\
 
 TEST_FILES	=	MyUnitTests.cpp			\
 

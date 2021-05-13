@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include <thread>
+#include <mutex>
+
 class ThreadPool {
     public:
         ThreadPool();
