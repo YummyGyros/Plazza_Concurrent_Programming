@@ -19,21 +19,21 @@
 
 typedef struct pizza_order_s {
     long mtype;
-    int type;
-    int size;
+    PizzaType type;
+    PizzaSize size;
 } pizza_order_t;
 
 typedef struct status_s {
     long mytype;
-    int tomato;
-    int gruyere;
-    int ham;
-    int mushrooms;
-    int steak;
-    int eggplant;
-    int goat_cheese;
-    int chief_love;
-    int cooks;
+    std::size_t tomato;
+    std::size_t gruyere;
+    std::size_t ham;
+    std::size_t mushrooms;
+    std::size_t steak;
+    std::size_t eggplant;
+    std::size_t goatCheese;
+    std::size_t chiefLove;
+    std::size_t pizza;
 } status_t;
 
 class MessageQueue {
