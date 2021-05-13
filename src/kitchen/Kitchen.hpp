@@ -49,7 +49,7 @@ class Kitchen {
         void checkIsAlive();
 
     private:
-        std::map<ingredients_e, int> _fridge;
+        std::map<int, std::string> _ingredients;
         ThreadPool _threads;
         bool _isAlive;
         int _lifeTime;
