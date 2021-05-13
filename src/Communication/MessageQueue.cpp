@@ -5,11 +5,7 @@
 ** MessageQueue
 */
 
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
 #include "MessageQueue.hpp"
-#include "CommunicationError.hpp"
 
 MessageQueue::MessageQueue(const std::string &name)
 {

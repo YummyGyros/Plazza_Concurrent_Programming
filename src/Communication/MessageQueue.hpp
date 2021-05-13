@@ -14,6 +14,8 @@
 #include <sys/ipc.h>
 #include <string.h>
 #include "Pizza.hpp"
+#include <sys/msg.h>
+#include "CommunicationError.hpp"
 
 typedef struct pizza_order_s {
     long mtype;
@@ -41,7 +43,7 @@ class MessageQueue {
 
         template<typename T>
         void sendMsg(T msg, int msgid) {
-            if (msgsnd(msgid, &pizza, sizeof(T), 0) == -1)
+            if (msgsnd(msgid, &msg, sizeof(T), 0) == -1)
                 throw CommunicationError("msgsnd failed.");
         };
         template<typename T>
