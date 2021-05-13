@@ -55,6 +55,14 @@ void Reception::manageOrder(const std::string &line)
     std::vector<Pizza> pizze = parseOrder(line);
     // for (auto const &pizza : pizze)
         // std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
+
+    // create a function translating a stock to the ability to prepare a pizza
+
+    //SEND A PIZZA:
+    //  - find kitchen: able to craft with stock / lowest totalPizze of all
+    //      --> if none can be found, create new kitchen
+    //  - send pizza to kitchen
+    //  - receive kitchen answer: stocks, totalPizze in kitchens
 }
 
 void Reception::displayStatus()

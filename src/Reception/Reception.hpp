@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "Pizza.hpp"
+#include "Kitchen.hpp"
 
 class Reception {
     public:
@@ -19,7 +20,6 @@ class Reception {
         ~Reception();
 
         void start();
-        void manageOrder(const std::string &line);
         void displayStatus();
 
         float getTimeMultiplier() const;
@@ -29,12 +29,15 @@ class Reception {
     protected:
     private:
         int checkLastArg(std::string &tmp);
+
+        void manageOrder(const std::string &line);
         std::vector<Pizza> parseOrder(const std::string &line);
         std::vector<Pizza> parsePizza(const std::string &segment);
 
         float _timeMultiplier;
         std::size_t _cooksPerKitchen;
         std::size_t _restockTime;
+        std::vector<Kitchen> _kitchens;
 };
 
 #endif /* !RECEPTION_HPP_ */

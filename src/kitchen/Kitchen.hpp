@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include "Thread/ThreadPool.hpp"
+#include "ThreadPool.hpp"
+#include "PizzaDefinitions.hpp"
 #include <map>
 #include <chrono>
 #include <vector>
@@ -20,29 +21,21 @@ enum ingredients_e
     mushrooms,
     steak,
     eggplant,
-    goat_cheese,
-    chief_love
-};
-
-enum  PizzaType
-{
-    Regina = 1,
-    Margarita = 2,
-    Americana = 4,
-    Fantasia = 8
+    goatCheese,
+    chiefLove
 };
 
 static const std::map<PizzaType, std::vector<ingredients_e>> Recipe = { 
     {Regina, {tomato, gruyere}},
     {Margarita, {tomato, gruyere, ham, mushrooms}},
     {Americana, {tomato, gruyere, steak}},
-    {Fantasia, {tomato, eggplant, goat_cheese, chief_love}}
+    {Fantasia, {tomato, eggplant, goatCheese, chiefLove}}
 };
 
 
 class Kitchen {
     public:
-        Kitchen(int);
+        Kitchen(float timeMul, std::size_t nbCooks, std::size_t restockTime);
         ~Kitchen();
 
         void startWork();
@@ -53,5 +46,8 @@ class Kitchen {
         ThreadPool _threads;
         bool _isAlive;
         int _lifeTime;
-        int _maxCooks;
+
+        float _timeMul;
+        std::size_t _nbCooks;
+        std::size_t _restockTime;
 };
