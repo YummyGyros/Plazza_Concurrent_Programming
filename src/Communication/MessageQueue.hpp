@@ -13,8 +13,10 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <string.h>
-#include "Pizza.hpp"
 #include <sys/msg.h>
+#include <cstdlib>
+#include <ctime>
+#include "Pizza.hpp"
 #include "CommunicationError.hpp"
 
 typedef struct pizza_order_s {
@@ -38,13 +40,25 @@ typedef struct status_s {
 
 class MessageQueue {
     public:
-        MessageQueue(const std::string &name);
+        MessageQueue();
         ~MessageQueue();
 
         template<typename T>
-        void sendMsg(T msg, int msgid);
+        void sendMsg(T msg, int msgid)
+        {
+            if (msgsnd(msgid, &msg, sizeof(T), 0) == -1)
+                throw CommunicationError("msgsnd failed.");
+        }
         template<typename T>
-        T recvMsg();
+        T recvMsg()
+        {
+            T pizza;
+
+            if (msgrcv(_msgid, &pizza, sizeof(T), 1, 0) == -1)
+                throw CommunicationError("msgrcv failed.");
+            std::cout << pizza.type << ": " << pizza.size << std::endl;
+            return pizza;
+        }
 
         int getMsgid();
     protected:

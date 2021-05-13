@@ -7,33 +7,21 @@
 
 #include "MessageQueue.hpp"
 
-template<typename T>
-void MessageQueue::sendMsg(T msg, int msgid)
-{
-    if (msgsnd(msgid, &msg, sizeof(T), 0) == -1)
-        throw CommunicationError("msgsnd failed.");
-}
-
-template<typename T>
-T MessageQueue::recvMsg()
-{
-    T pizza;
-
-    if (msgrcv(_msgid, &pizza, sizeof(T), 1, 0) == -1)
-        throw CommunicationError("msgrcv failed.");
-    std::cout << pizza.type << ": " << pizza.size << std::endl;
-    return pizza;
-}
-
 int MessageQueue::getMsgid()
 {
     return _msgid;
 }
 
-MessageQueue::MessageQueue(const std::string &name)
+MessageQueue::MessageQueue()
 {
-    key_t key = ftok(name.c_str(), 65);
+    key_t key = 0;
+    int random_variable = 0;
 
+    std::srand(std::time(nullptr));
+    random_variable = std::rand()%100000;
+    if (std::fopen(std::to_string(random_variable).c_str(), "w") == nullptr)
+        throw CommunicationError(std::to_string(random_variable) + "Unable to create the Communication file.");
+    key = ftok(std::to_string(random_variable).c_str(), 65);
     if (key == -1)
         throw CommunicationError("ftok failed.");
     _msgid = msgget(key, 0666 | IPC_CREAT);
