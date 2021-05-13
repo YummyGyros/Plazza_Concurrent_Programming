@@ -17,6 +17,7 @@ TEST_BIN	=	unit_tests
 ## FILES ##############################
 
 COMMUNICATION_FILES	=	MessageQueue.cpp\
+						Serializing.cpp	\
 
 RECEP_FILES	=	Reception.cpp			\
 

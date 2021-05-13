@@ -42,12 +42,14 @@ class Kitchen {
         void checkIsAlive();
 
     private:
-        std::map<ingredients_e, int> _fridge;
-        ThreadPool _threads;
-        bool _isAlive;
-        int _lifeTime;
-
         float _timeMul;
         std::size_t _nbCooks;
         std::size_t _restockTime;
+
+        std::size_t _totalPizze;
+        bool _isAlive;
+        int _lifeTime;
+
+        ThreadPool _threads;
+        std::map<ingredients_e, std::size_t> _fridge;
 };
