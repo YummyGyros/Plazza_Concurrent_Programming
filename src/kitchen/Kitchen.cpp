@@ -7,12 +7,20 @@
 
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(float timeMultiplier, std::size_t cooksPerKitchen, std::size_t restockTime)
+Kitchen::Kitchen(float timeMul, std::size_t nbCooks, std::size_t restockTime)
+    : _isAlive(true), _lifeTime(5), _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime),
+    _fridge({
+        {tomato, 5},
+        {gruyere, 5},
+        {ham, 5},
+        {mushrooms, 5},
+        {steak, 5},
+        {eggplant, 5},
+        {goatCheese, 5},
+        {chiefLove, 5}
+    })
 {
-    _maxCooks = maxCooks;
     ThreadPool _threads();
-    _isAlive = true;
-    _lifeTime = 5;
 }
 
 Kitchen::~Kitchen()
