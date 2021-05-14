@@ -19,8 +19,6 @@ class Reception {
         Reception(char **av);
         ~Reception();
 
-        void displayStatus();
-
         float getTimeMultiplier() const;
         std::size_t getCooksPerKitchen() const;
         std::size_t getRestockTime() const;
@@ -29,16 +27,22 @@ class Reception {
     protected:
     private:
 
-        void selectStdin(fd_set *fds);
+        void displayStatus();
+        void manageOrders();
+        void updateShell();
         int checkLastArg(std::string &tmp);
 
-        void manageOrder(const std::string &line);
-        std::vector<Pizza> parseOrder(const std::string &line);
+        void getNewOrder(const std::string &line);
         std::vector<Pizza> parsePizza(const std::string &segment);
+
+        std::string _shellLine;
 
         float _timeMultiplier;
         std::size_t _cooksPerKitchen;
         std::size_t _restockTime;
+
+        std::vector<std::vector<Pizza>> _orders;
+
         std::vector<Kitchen> _kitchens;
         std::size_t _kitchensId;
 
