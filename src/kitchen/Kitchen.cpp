@@ -8,9 +8,9 @@
 #include "Kitchen.hpp"
 
 Kitchen::Kitchen(const Kitchen &kitchen)
-    : _timeMul(kitchen.getTimeMul()), _nbCooks(kitchen.getNbCooks()),
-    _restockTime(kitchen.getRestockTime()), _totalPizze(0), _isAlive(true), _lifeTime(5),
-    _msg(kitchen.getId()), _id(kitchen.getId()),
+    : _timeMul(std::move(kitchen._timeMul)), _nbCooks(std::move(kitchen._nbCooks)),
+    _restockTime(std::move(kitchen._restockTime)), _totalPizze(0), _isAlive(true), _lifeTime(5),
+    _msg(std::move(kitchen._id)), _id(std::move(kitchen._id)),
     _fridge({
         {tomato, 5},
         {gruyere, 5},
