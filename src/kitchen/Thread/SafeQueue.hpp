@@ -46,6 +46,21 @@ class SafeQueue {
             return true;
         };
 
+        const std::queue<T> &getQueue() const
+        {
+            return _queue;
+        }
+
+        const std::mutex &getMutex() const
+        {
+            return _mutexQueue;
+        }
+
+        const std::condition_variable &getCondition() const
+        {
+            return _cv;
+        }
+
     private:
         std::queue<T> _queue;
         std::mutex _mutexQueue;
