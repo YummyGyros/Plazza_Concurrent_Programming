@@ -22,8 +22,6 @@ Kitchen::Kitchen(const Kitchen &kitchen)
         {chiefLove, 5}
     })
 {
-    SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
-    ThreadPool _threads(_timeMul, _nbCooks, _queue);
 }
 
 Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime)
@@ -40,8 +38,6 @@ Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, st
         {chiefLove, 5}
     })
 {
-    SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
-    ThreadPool _threads(_timeMul, _nbCooks, _queue);
 }
 
 Kitchen::~Kitchen()
@@ -64,6 +60,9 @@ void Kitchen::checkIsAlive()
 
 void Kitchen::startWork()
 {
+    SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
+    ThreadPool _threads(_timeMul, _nbCooks, _queue);
+
     while (_isAlive) {
         checkIsAlive();
     }
