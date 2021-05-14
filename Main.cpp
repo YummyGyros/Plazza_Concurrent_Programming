@@ -37,8 +37,6 @@ int main(int ac, char **av)
     }
     try {
         Reception recep(av);
-
-        recep.start();
     } catch (Error &e) {
         std::cerr << e.what() << std::endl;
         return 84;

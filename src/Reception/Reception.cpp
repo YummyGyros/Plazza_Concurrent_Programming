@@ -11,11 +11,29 @@
 #include <iostream>
 #include <sstream>
 
+#include <sys/select.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 Reception::Reception(char **av)
 {
     _timeMultiplier = std::stof(av[1]);
     _cooksPerKitchen = std::stoi(av[2]);
     _restockTime = std::stoi(av[3]);
+
+    std::string line;
+
+    while (1) {
+        selectStdin();
+        std::getline(std::cin, line);
+        if (line.compare("status") == 0)
+            displayStatus();
+        else if (line.compare("exit") == 0)
+            break;
+        else
+            manageOrder(line);
+    }
 }
 
 Reception::~Reception()
@@ -37,24 +55,22 @@ std::size_t Reception::getRestockTime() const
     return _restockTime;
 }
 
-void Reception::start()
+void Reception::selectStdin()
 {
-    std::string line;
+    fd_set fds;
 
-    while (std::getline(std::cin, line)) {
-        if (line.compare("status") == 0)
-            displayStatus();
-        else
-            manageOrder(line);
-    }
+    FD_ZERO (&fds);   
+    FD_SET (STDIN_FILENO, &fds);
+    if (select (STDIN_FILENO + 1, &fds, NULL, NULL, NULL) == -1)
+        throw Error("select failed");
 }
 
-// hésitez pas à enlever cette fonction si jamais vous avez besoin de faire vos trucs dans start directement
 void Reception::manageOrder(const std::string &line)
 {
     std::vector<Pizza> pizze = parseOrder(line);
+    //PIZZA VECTOR DISPLAY:
     // for (auto const &pizza : pizze)
-        // std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
+    //     std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
 
     // create a function translating a stock to the ability to prepare a pizza
 
@@ -77,8 +93,12 @@ std::vector<Pizza> Reception::parseOrder(const std::string &line)
     std::vector<Pizza> pizze;
 
     while (std::getline(stream, segment, ';'))
-        for (const auto &pizza: parsePizza(segment))
-            pizze.push_back(pizza);
+        try {
+            for (const auto &pizza: parsePizza(segment))
+                pizze.push_back(pizza);
+        } catch (Error &e) {
+            std::cerr << e.what() << std::endl;
+        }
     return pizze;
 }
 

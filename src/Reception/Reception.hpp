@@ -19,7 +19,7 @@ class Reception {
         Reception(char **av);
         ~Reception();
 
-        void start();
+        void selectStdin();
         void displayStatus();
 
         float getTimeMultiplier() const;
