@@ -15,26 +15,7 @@
 #include "ThreadPool.hpp"
 #include "PizzaDefinitions.hpp"
 #include "MessageQueue.hpp"
-
-enum ingredients_e
-{
-    tomato,
-    gruyere,
-    ham,
-    mushrooms,
-    steak,
-    eggplant,
-    goatCheese,
-    chiefLove
-};
-
-static const std::map<PizzaType, std::vector<ingredients_e>> Recipe = { 
-    {Regina, {tomato, gruyere}},
-    {Margarita, {tomato, gruyere, ham, mushrooms}},
-    {Americana, {tomato, gruyere, steak}},
-    {Fantasia, {tomato, eggplant, goatCheese, chiefLove}}
-};
-
+#include "Serializing.hpp"
 
 class Kitchen {
     public:
@@ -53,6 +34,8 @@ class Kitchen {
     private:
         std::string _id;
         MessageQueue _msg;
+        Serializing srl;
+
         float _timeMul;
         std::size_t _nbCooks;
         std::size_t _restockTime;

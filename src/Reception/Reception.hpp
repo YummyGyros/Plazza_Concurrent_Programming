@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <thread>
 
 #include "Pizza.hpp"
 #include "Kitchen.hpp"
@@ -21,7 +22,6 @@ class Reception {
         ~Reception();
 
         void selectStdin();
-        void displayStatus();
 
         float getTimeMultiplier() const;
         std::size_t getCooksPerKitchen() const;
@@ -40,6 +40,7 @@ class Reception {
 
         void getNewOrder(const std::string &line);
         std::vector<Pizza> parsePizza(const std::string &segment);
+        void takeFinishedOrders();
 
         std::string _shellLine;
 
@@ -53,6 +54,9 @@ class Reception {
         std::size_t _kitchensId;
 
         MessageQueue _msg;
+        std::thread _thread;
+        Serializing srl;
+        std::vector<Pizza> _finishedPizze;
 };
 
 #endif /* !RECEPTION_HPP_ */

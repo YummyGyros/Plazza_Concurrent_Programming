@@ -9,7 +9,25 @@
 #define SERIALIZING_HPP_
 
 #include "MessageQueue.hpp"
-#include "Kitchen.hpp"
+
+enum ingredients_e
+{
+    tomato,
+    gruyere,
+    ham,
+    mushrooms,
+    steak,
+    eggplant,
+    goatCheese,
+    chiefLove
+};
+
+static const std::map<PizzaType, std::vector<ingredients_e>> Recipe = { 
+    {Regina, {tomato, gruyere}},
+    {Margarita, {tomato, gruyere, ham, mushrooms}},
+    {Americana, {tomato, gruyere, steak}},
+    {Fantasia, {tomato, eggplant, goatCheese, chiefLove}}
+};
 
 class Serializing {
     public:

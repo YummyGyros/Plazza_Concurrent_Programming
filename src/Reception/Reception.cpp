@@ -22,6 +22,7 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
     _cooksPerKitchen = std::stoi(av[2]);
     _restockTime = std::stoi(av[3]);
     _kitchensId = 0;
+    _thread = std::thread(&Reception::takeFinishedOrders, this);
 
     while (1) {
         updateShell();
@@ -32,11 +33,22 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
         else if (_shellLine.compare("") != 0)
             getNewOrder(_shellLine);
         manageOrders();
+        for (auto &it: _finishedPizze)
+            std::cout << it.getPizzaType() << std::endl;
+        // _thread.join();
     }
 }
 
 Reception::~Reception()
 {
+}
+
+
+void Reception::takeFinishedOrders()
+{
+    Pizza pizza = srl.unpack(_msg.recvMsg<pizza_order_t>());
+    _finishedPizze.push_back(pizza);
+    std::cout << pizza.getPizzaType() << std::endl;
 }
 
 float Reception::getTimeMultiplier() const
