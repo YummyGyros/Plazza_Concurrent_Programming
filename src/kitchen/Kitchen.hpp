@@ -39,13 +39,19 @@ static const std::map<PizzaType, std::vector<ingredients_e>> Recipe = {
 class Kitchen {
     public:
         Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime);
+        Kitchen(const Kitchen &kitchen);
         ~Kitchen();
 
         void startWork();
         void checkIsAlive();
         const MessageQueue &getMessageQueue() const;
+        const std::string &getId() const;
+        float getTimeMul() const;
+        const std::size_t &getNbCooks() const;
+        const std::size_t &getRestockTime() const;
 
     private:
+        std::string _id;
         MessageQueue _msg;
         float _timeMul;
         std::size_t _nbCooks;

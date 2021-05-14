@@ -160,3 +160,14 @@ const MessageQueue &Reception::getMessageQueue() const
 {
     return _msg;
 }
+
+void Reception::addKitchen()
+{
+    _kitchensId++;
+    _kitchens.emplace_back(std::to_string(_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime);
+}
+
+void Reception::deleteKitchen(const std::string &id)
+{
+    // _kitchens.erase(std::remove_if(_kitchens.begin(), _kitchens.end(), [&id](Kitchen &kitchen){return (id == kitchen.getId());}));
+}
