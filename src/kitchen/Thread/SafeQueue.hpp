@@ -21,7 +21,7 @@ class SafeQueue {
         void push(T value)
         {
             std::unique_lock<std::mutex> lock(_mutexQueue, std::defer_lock);
-            _queue.push_back(value);
+            _queue.push(value);
             _mutexQueue.unlock();
             _cv.notify_all();
         };
