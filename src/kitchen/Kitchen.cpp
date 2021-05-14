@@ -7,9 +7,28 @@
 
 #include "Kitchen.hpp"
 
+Kitchen::Kitchen(const Kitchen &kitchen)
+    : _timeMul(kitchen.getTimeMul()), _nbCooks(kitchen.getNbCooks()),
+    _restockTime(kitchen.getRestockTime()), _totalPizze(0), _isAlive(true), _lifeTime(5),
+    _msg(kitchen.getId()), _id(kitchen.getId()),
+    _fridge({
+        {tomato, 5},
+        {gruyere, 5},
+        {ham, 5},
+        {mushrooms, 5},
+        {steak, 5},
+        {eggplant, 5},
+        {goatCheese, 5},
+        {chiefLove, 5}
+    })
+{
+    SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
+    ThreadPool _threads(_timeMul, _nbCooks, _queue);
+}
+
 Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime)
     : _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true), _lifeTime(5),
-    _msg(name),
+    _msg("Kitchen" + name), _id(name),
     _fridge({
         {tomato, 5},
         {gruyere, 5},
@@ -53,4 +72,24 @@ void Kitchen::startWork()
 const MessageQueue &Kitchen::getMessageQueue() const
 {
     return _msg;
+}
+
+const std::string &Kitchen::getId() const
+{
+    return _id;
+}
+
+float Kitchen::getTimeMul() const
+{
+    return _timeMul;
+}
+
+const std::size_t &Kitchen::getNbCooks() const
+{
+    return _nbCooks;
+}
+
+const std::size_t &Kitchen::getRestockTime() const
+{
+    return _restockTime;
 }
