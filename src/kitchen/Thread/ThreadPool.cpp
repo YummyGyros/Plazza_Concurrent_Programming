@@ -7,6 +7,11 @@
 
 #include "ThreadPool.hpp"
 
+ThreadPool::~ThreadPool()
+{
+    _threads.clear();
+}
+
 void ThreadPool::cook(SafeQueue<std::pair<PizzaType, PizzaSize>> &queue)
 {
     std::pair<PizzaType, PizzaSize> pizza;
@@ -24,17 +29,13 @@ ThreadPool::ThreadPool(float timeMult, std::size_t numberCooks, SafeQueue<std::p
     int n = 0;
 
     while (n != _numberCooks) {
-        _threads.push_back(std::thread(&ThreadPool::cook, this, std::ref(queue)));
+        _threads.push_back(std::move(std::thread(&ThreadPool::cook, this, std::ref(queue))));
         n++;
     }
-    n = 0;
-    while (n != _numberCooks) {
-        _threads.at(n).join();
-        n++;
+    for (std::thread & th : _threads)
+    {
+        if (th.joinable()) {
+            th.join();
+        }
     }
-}
-
-ThreadPool::~ThreadPool()
-{
-    _threads.clear();
 }
