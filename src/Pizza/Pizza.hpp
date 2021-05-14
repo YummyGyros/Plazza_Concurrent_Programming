@@ -17,16 +17,20 @@ class Pizza {
         Pizza();
         Pizza(const Pizza &pizza);
         ~Pizza() = default;
+        bool operator==(const Pizza &rhs) const;
 
         void setPizzaType(const PizzaType type);
         void setPizzaSize(const PizzaSize size);
+        void setIsCooked(const bool isCooked);
 
         PizzaType getPizzaType() const;
         PizzaSize getPizzaSize() const;
+        bool getIsCooked() const;
     protected:
     private:
         PizzaType _type;
         PizzaSize _size;
+        bool _isCooked;
 };
 
 #endif /* !PIZZA_HPP_ */
