@@ -13,7 +13,7 @@
 
 #include "SafeQueue.hpp"
 #include "ThreadPool.hpp"
-#include "PizzaDefinitions.hpp"
+#include "Pizza.hpp"
 #include "MessageQueue.hpp"
 #include "Serializing.hpp"
 
@@ -30,12 +30,14 @@ class Kitchen {
         float getTimeMul() const;
         const std::size_t &getNbCooks() const;
         const std::size_t &getRestockTime() const;
+        void takeOrders();
 
     private:
         std::string _id;
         MessageQueue _msg;
-        Serializing srl;
+        Serializing _srl;
 
+        std::thread _orders;
         float _timeMul;
         std::size_t _nbCooks;
         std::size_t _restockTime;

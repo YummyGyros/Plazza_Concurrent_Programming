@@ -58,10 +58,19 @@ void Kitchen::checkIsAlive()
         _isAlive = false;
 }
 
+void Kitchen::takeOrders()
+{
+    while (true) {
+        Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+        _queue.push(std::make_pair(pizza.getPizzaType(), pizza.getPizzaSize()));
+    }
+}
+
 void Kitchen::startWork()
 {
     SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
     ThreadPool _threads(_timeMul, _nbCooks, _queue);
+    _orders = std::thread(&Kitchen::takeOrders);
 
     while (_isAlive) {
         checkIsAlive();

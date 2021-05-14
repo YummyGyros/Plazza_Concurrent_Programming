@@ -33,9 +33,6 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
         else if (_shellLine.compare("") != 0)
             getNewOrder(_shellLine);
         manageOrders();
-        for (auto &it: _finishedPizze)
-            std::cout << it.getPizzaType() << std::endl;
-        // _thread.join();
     }
 }
 
@@ -46,9 +43,10 @@ Reception::~Reception()
 
 void Reception::takeFinishedOrders()
 {
-    Pizza pizza = srl.unpack(_msg.recvMsg<pizza_order_t>());
-    _finishedPizze.push_back(pizza);
-    std::cout << pizza.getPizzaType() << std::endl;
+    while (true) {
+        Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+        _finishedPizze.push_back(pizza);
+    }
 }
 
 float Reception::getTimeMultiplier() const

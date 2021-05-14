@@ -55,7 +55,7 @@ class Reception {
 
         MessageQueue _msg;
         std::thread _thread;
-        Serializing srl;
+        Serializing _srl;
         std::vector<Pizza> _finishedPizze;
 };
 
