@@ -16,11 +16,12 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-Reception::Reception(char **av)
+Reception::Reception(char **av) : _msg("Reception")
 {
     _timeMultiplier = std::stof(av[1]);
     _cooksPerKitchen = std::stoi(av[2]);
     _restockTime = std::stoi(av[3]);
+    _kitchensId = 0;
 
     std::string line;
 
@@ -76,9 +77,10 @@ void Reception::manageOrder(const std::string &line)
 
     //SEND A PIZZA:
     //  - find kitchen: able to craft with stock / lowest totalPizze of all
-    //      --> if none can be found, create new kitchen
+    //      --> if none can be found, create new kitchen: Kitchen("Kitchen" + _nbKitchen)
     //  - send pizza to kitchen
     //  - receive kitchen answer: stocks, totalPizze in kitchens
+
 }
 
 void Reception::displayStatus()
@@ -144,4 +146,9 @@ std::vector<Pizza> Reception::parsePizza(const std::string &segment)
         pizze.push_back(tmp);
     }
     return pizze;
+}
+
+const MessageQueue &Reception::getMessageQueue() const
+{
+    return _msg;
 }

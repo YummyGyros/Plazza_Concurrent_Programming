@@ -40,7 +40,7 @@ pizza_order_t Serializing::pack(Pizza pizza)
 status_t Serializing::pack(std::map<ingredients_e, std::size_t> stock)
 {
     return {1, stock[tomato], stock[gruyere], stock[ham], stock[mushrooms],
-    stock[steak], stock[eggplant], stock[goatCheese], stock[chiefLove]};
+    stock[steak], stock[eggplant], stock[goatCheese], stock[chiefLove], 1};
 }
 
 Serializing::Serializing()
