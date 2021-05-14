@@ -10,6 +10,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "Pizza.hpp"
 #include "Kitchen.hpp"
@@ -27,6 +28,8 @@ class Reception {
         std::size_t getRestockTime() const;
 
         const MessageQueue &getMessageQueue() const;
+        void addKitchen();
+        void deleteKitchen(const std::string &id);
     protected:
     private:
         int checkLastArg(std::string &tmp);
