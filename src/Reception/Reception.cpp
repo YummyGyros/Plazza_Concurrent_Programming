@@ -16,27 +16,22 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-Reception::Reception(char **av) : _msg("Reception")
+Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
 {
     _timeMultiplier = std::stof(av[1]);
     _cooksPerKitchen = std::stoi(av[2]);
     _restockTime = std::stoi(av[3]);
     _kitchensId = 0;
 
-    std::string line;
-    fd_set fds;
-
     while (1) {
-        selectStdin(&fds);
-        if (FD_ISSET(STDIN_FILENO, &fds)) {
-            std::getline(std::cin, line);
-            if (line.compare("status") == 0)
-                displayStatus();
-            else if (line.compare("exit") == 0)
-                break;
-            else
-                manageOrder(line);
-        }
+        updateShell();
+        if (_shellLine.compare("status") == 0)
+            displayStatus();
+        else if (_shellLine.compare("exit") == 0)
+            break;
+        else if (_shellLine.compare("") != 0)
+            getNewOrder(_shellLine);
+        manageOrders();
     }
 }
 
@@ -59,50 +54,62 @@ std::size_t Reception::getRestockTime() const
     return _restockTime;
 }
 
-void Reception::selectStdin(fd_set *fds)
+void Reception::updateShell()
 {
-    FD_ZERO (fds);
-    FD_SET (STDIN_FILENO, fds);
-    if (select (STDIN_FILENO + 1, fds, NULL, NULL, NULL) == -1)
-        throw Error("select failed");
+    struct timeval tv = { 0, 250000L };
+    fd_set fds;
+
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+    int ready = select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
+    if (ready < 0)
+        throw Error("select failed.");
+    if (ready > 0)
+        std::getline(std::cin, _shellLine);
+    else
+        _shellLine = "";
 }
 
-void Reception::manageOrder(const std::string &line)
+void Reception::manageOrders()
 {
-    std::vector<Pizza> pizze = parseOrder(line);
-    //PIZZA VECTOR DISPLAY:
-    // for (auto const &pizza : pizze)
-    //     std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
+    //_orders DISPLAY:
+    // for (auto const &order : _orders)
+    //     for (auto const &pizza : order)
+    //         std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
 
     // create: bool canCookPizza(PizzaType, stock)
 
-    //SEND A PIZZA:
+    //ORDER RECEPTION:
     //  - find kitchen: able to craft with stock / lowest totalPizze of all
     //      --> if none can be found, create new kitchen: Kitchen("Kitchen" + _nbKitchen)
-    //  - send pizza to kitchen
-    //  - receive kitchen answer: stocks, totalPizze in kitchens
+    //  - send pizza packed to kitchen
+    //  - receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
 
+    //RECEIVE PIZZE FROM KITCHEN:
+    //  std::vector<std::vector<Pizza> pizze> orders;
+    //  - through orders, find first pizza of received type for which isCooked == false
+    //  - check all orders: if in one, all Pizza.isCooked == true --> ORDER READY --> display --> logfile --> rm
+}
+
+void Reception::getNewOrder(const std::string &line)
+{
+    try {
+        std::stringstream stream(line);
+        std::string segment;
+        std::vector<Pizza> pizze;
+
+        while (std::getline(stream, segment, ';'))
+                for (const auto &pizza: parsePizza(segment))
+                    pizze.push_back(pizza);
+        _orders.push_back(pizze);
+    } catch (Error &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 void Reception::displayStatus()
 {
     std::cout << "Status information should be displayed here." << std::endl;
-}
-
-std::vector<Pizza> Reception::parseOrder(const std::string &line)
-{
-    std::stringstream stream(line);
-    std::string segment;
-    std::vector<Pizza> pizze;
-
-    while (std::getline(stream, segment, ';'))
-        try {
-            for (const auto &pizza: parsePizza(segment))
-                pizze.push_back(pizza);
-        } catch (Error &e) {
-            std::cerr << e.what() << std::endl;
-        }
-    return pizze;
 }
 
 int Reception::checkLastArg(std::string &tmp)
