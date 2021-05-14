@@ -19,7 +19,6 @@ class Reception {
         Reception(char **av);
         ~Reception();
 
-        void selectStdin();
         void displayStatus();
 
         float getTimeMultiplier() const;
@@ -28,6 +27,8 @@ class Reception {
 
     protected:
     private:
+
+        void selectStdin(fd_set *fds);
         int checkLastArg(std::string &tmp);
 
         void manageOrder(const std::string &line);

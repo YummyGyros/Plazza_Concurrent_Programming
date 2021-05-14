@@ -23,16 +23,19 @@ Reception::Reception(char **av)
     _restockTime = std::stoi(av[3]);
 
     std::string line;
+    fd_set fds;
 
     while (1) {
-        selectStdin();
-        std::getline(std::cin, line);
-        if (line.compare("status") == 0)
-            displayStatus();
-        else if (line.compare("exit") == 0)
-            break;
-        else
-            manageOrder(line);
+        selectStdin(&fds);
+        if (FD_ISSET(STDIN_FILENO, &fds)) {
+            std::getline(std::cin, line);
+            if (line.compare("status") == 0)
+                displayStatus();
+            else if (line.compare("exit") == 0)
+                break;
+            else
+                manageOrder(line);
+        }
     }
 }
 
@@ -55,13 +58,11 @@ std::size_t Reception::getRestockTime() const
     return _restockTime;
 }
 
-void Reception::selectStdin()
+void Reception::selectStdin(fd_set *fds)
 {
-    fd_set fds;
-
-    FD_ZERO (&fds);   
-    FD_SET (STDIN_FILENO, &fds);
-    if (select (STDIN_FILENO + 1, &fds, NULL, NULL, NULL) == -1)
+    FD_ZERO (fds);
+    FD_SET (STDIN_FILENO, fds);
+    if (select (STDIN_FILENO + 1, fds, NULL, NULL, NULL) == -1)
         throw Error("select failed");
 }
 
@@ -72,7 +73,7 @@ void Reception::manageOrder(const std::string &line)
     // for (auto const &pizza : pizze)
     //     std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
 
-    // create a function translating a stock to the ability to prepare a pizza
+    // create: bool canCookPizza(PizzaType, stock)
 
     //SEND A PIZZA:
     //  - find kitchen: able to craft with stock / lowest totalPizze of all
