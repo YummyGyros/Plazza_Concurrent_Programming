@@ -33,16 +33,16 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
         else if (_shellLine.compare("") != 0)
             parseNewOrder(_shellLine);
         manageOrders();
-        for (auto &it: _finishedPizze)
-            std::cout << it.getPizzaType() << std::endl;
-        // _thread.join();
     }
 }
 
 Reception::~Reception()
 {
+    for (auto &order : _orders)
+        order.clear();
+    _orders.clear();
+    _kitchens.clear();
 }
-
 
 void Reception::receiveCookedPizza()
 {

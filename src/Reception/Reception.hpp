@@ -54,7 +54,6 @@ class Reception {
         MessageQueue _msg;
         std::thread _thread;
         Serializing srl;
-        std::vector<Pizza> _finishedPizze;
 };
 
 #endif /* !RECEPTION_HPP_ */
