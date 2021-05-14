@@ -176,7 +176,7 @@ const MessageQueue &Reception::getMessageQueue() const
 void Reception::addKitchen()
 {
     _kitchensId++;
-    _kitchens.emplace_back(std::to_string(_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime);
+    _kitchens.emplace_back(std::to_string(_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
 }
 
 void Reception::deleteKitchen(const std::string &id)

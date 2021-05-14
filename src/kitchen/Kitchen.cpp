@@ -10,7 +10,7 @@
 Kitchen::Kitchen(const Kitchen &kitchen)
     : _timeMul(std::move(kitchen._timeMul)), _nbCooks(std::move(kitchen._nbCooks)),
     _restockTime(std::move(kitchen._restockTime)), _totalPizze(0), _isAlive(true), _lifeTime(5),
-    _msg(std::move(kitchen._id)), _id(std::move(kitchen._id)),
+    _msg(std::move(kitchen._id)), _id(std::move(kitchen._id)), _receptionId(kitchen._receptionId),
     _fridge({
         {tomato, 5},
         {gruyere, 5},
@@ -24,9 +24,9 @@ Kitchen::Kitchen(const Kitchen &kitchen)
 {
 }
 
-Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime)
+Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime, int receptionId)
     : _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true), _lifeTime(5),
-    _msg("Kitchen" + name), _id(name),
+    _msg("Kitchen" + name), _id(name), _receptionId(receptionId),
     _fridge({
         {tomato, 5},
         {gruyere, 5},

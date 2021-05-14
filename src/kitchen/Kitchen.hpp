@@ -19,7 +19,7 @@
 
 class Kitchen {
     public:
-        Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime);
+        Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime, int recpetionId);
         Kitchen(const Kitchen &kitchen);
         ~Kitchen();
 
@@ -46,6 +46,6 @@ class Kitchen {
 
         ThreadPool _threads;
         std::map<ingredients_e, std::size_t> _fridge;
-
+        int _receptionId;
         SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
 };
