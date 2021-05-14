@@ -25,6 +25,7 @@ class Reception {
         std::size_t getCooksPerKitchen() const;
         std::size_t getRestockTime() const;
 
+        const MessageQueue &getMessageQueue() const;
     protected:
     private:
 
@@ -39,6 +40,9 @@ class Reception {
         std::size_t _cooksPerKitchen;
         std::size_t _restockTime;
         std::vector<Kitchen> _kitchens;
+        std::size_t _kitchensId;
+
+        MessageQueue _msg;
 };
 
 #endif /* !RECEPTION_HPP_ */

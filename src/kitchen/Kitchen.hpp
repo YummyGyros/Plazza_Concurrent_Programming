@@ -14,6 +14,7 @@
 #include "SafeQueue.hpp"
 #include "ThreadPool.hpp"
 #include "PizzaDefinitions.hpp"
+#include "MessageQueue.hpp"
 
 enum ingredients_e
 {
@@ -37,13 +38,15 @@ static const std::map<PizzaType, std::vector<ingredients_e>> Recipe = {
 
 class Kitchen {
     public:
-        Kitchen(float timeMul, std::size_t nbCooks, std::size_t restockTime);
+        Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime);
         ~Kitchen();
 
         void startWork();
         void checkIsAlive();
+        const MessageQueue &getMessageQueue() const;
 
     private:
+        MessageQueue _msg;
         float _timeMul;
         std::size_t _nbCooks;
         std::size_t _restockTime;
