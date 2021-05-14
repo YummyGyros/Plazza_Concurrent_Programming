@@ -22,7 +22,7 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
     _cooksPerKitchen = std::stoi(av[2]);
     _restockTime = std::stoi(av[3]);
     _kitchensId = 0;
-    _thread = std::thread(&Reception::takeFinishedOrders, this);
+    _thread = std::thread(&Reception::receiveCookedPizza, this);
 
     while (1) {
         updateShell();
@@ -31,21 +31,38 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
         else if (_shellLine.compare("exit") == 0)
             break;
         else if (_shellLine.compare("") != 0)
-            getNewOrder(_shellLine);
+            parseNewOrder(_shellLine);
         manageOrders();
     }
 }
 
 Reception::~Reception()
 {
+    for (auto &order : _orders)
+        order.clear();
+    _orders.clear();
+    _kitchens.clear();
 }
 
-
-void Reception::takeFinishedOrders()
+void Reception::receiveCookedPizza()
 {
-    while (true) {
-        Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
-        _finishedPizze.push_back(pizza);
+    Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+    bool orderReady;
+
+    for (auto it = std::begin(_orders); it != std::end(_orders); ++it) {
+        orderReady = true;
+        for (auto &refPizza : *it) {
+            if (!pizza.getIsCooked() && pizza == refPizza)
+                refPizza.setIsCooked(true);
+            if (!pizza.getIsCooked())
+                orderReady = false;
+        }
+        if (orderReady) {
+            displayOrder(*it);
+            (*it).clear();
+            _orders.erase(it);
+            break;
+        }
     }
 }
 
@@ -98,10 +115,9 @@ void Reception::manageOrders()
     //RECEIVE PIZZE FROM KITCHEN:
     //  std::vector<std::vector<Pizza> pizze> orders;
     //  - through orders, find first pizza of received type for which isCooked == false
-    //  - check all orders: if in one, all Pizza.isCooked == true --> ORDER READY --> display --> logfile --> rm
 }
 
-void Reception::getNewOrder(const std::string &line)
+void Reception::parseNewOrder(const std::string &line)
 {
     try {
         std::stringstream stream(line);
@@ -115,6 +131,17 @@ void Reception::getNewOrder(const std::string &line)
     } catch (Error &e) {
         std::cerr << e.what() << std::endl;
     }
+}
+
+void Reception::displayOrder(const std::vector<Pizza> &pizze)
+{
+    std::cout << "==========================" << std::endl;
+    std::cout << "Order Ready" << std::endl;
+    std::cout << "--------------------------" << std::endl;
+    for (const auto &pizza : pizze) {
+        std::cout << "pizza:\ttype:\t" << pizza.getPizzaType() << "\t\tsize:\t" << pizza.getPizzaSize() << std::endl;
+    }
+    std::cout << "==========================" << std::endl;
 }
 
 void Reception::displayStatus()

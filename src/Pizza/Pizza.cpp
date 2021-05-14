@@ -17,9 +17,19 @@ Pizza::Pizza(const Pizza &pizza)
     this->_type = pizza._type;
 }
 
+bool Pizza::operator==(const Pizza &rhs) const
+{
+    return _type == rhs._type && _size == rhs._size;
+}
+
 void Pizza::setPizzaType(const PizzaType type)
 {
     _type = type;
+}
+
+void Pizza::setIsCooked(const bool isCooked)
+{
+    _isCooked = isCooked;
 }
 
 PizzaType Pizza::getPizzaType() const
@@ -35,4 +45,9 @@ void Pizza::setPizzaSize(const PizzaSize size)
 PizzaSize Pizza::getPizzaSize() const
 {
     return _size;
+}
+
+bool Pizza::getIsCooked() const
+{
+    return _isCooked;
 }
