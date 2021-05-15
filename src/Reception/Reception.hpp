@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <thread>
 #include <chrono>
+#include <ratio>
 
 #include "Pizza.hpp"
 #include "Kitchen.hpp"
@@ -30,6 +31,8 @@ class Reception {
         void addKitchen();
         void deleteKitchen(const std::string &id);
         void restockFridges();
+        std::chrono::_V2::system_clock::time_point restockClock
+        (std::chrono::_V2::system_clock::time_point);
     protected:
     private:
         void displayOrder(const std::vector<Pizza> &pizze);
