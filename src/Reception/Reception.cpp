@@ -34,7 +34,6 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
             else
                 manageNewOrder(_shellLine);
         }
-        manageOrders();
     }
 }
 
@@ -99,33 +98,22 @@ void Reception::updateShell()
         _shellLine = "";
 }
 
-void Reception::manageOrders()
+bool Reception::canCookPizza(const Pizza &pizza, const Kitchen &kitchen)
 {
-    //_orders DISPLAY:
-    // for (auto const &order : _orders)
-    //     for (auto const &pizza : order)
-    //         std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
+    return true;
 }
 
-// bool cmp(const Kitchen &lhs, const Kitchen &rhs)
-// {
-//     return lhs.getTotalPizze() < rhs.getTotalPizze();
-// }
+void Reception::consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen)
+{
+
+}
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
-    // create: bool canCookPizza(PizzaType, stock)
-
-    //ORDER RECEPTION:
-    //  - find kitchen: able to craft with stock / lowest totalPizze of all
-    //      --> if none can be found, create new kitchen: Kitchen("Kitchen" + _nbKitchen)
-
-    //  - EITHER:
-    //      - update _stocks, _totalPizze and send pizza packed to kitchen
-    //      - send pizza packed to kitchen and receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
-
-
-    // auto max = std::min_element(_kitchens.begin(), _kitchens.end(), cmp);
+    // FIND KITCHEN: canCookPizza() == true && lowest totalPizze of all.
+    //      -->  if none --> createKitchen
+    // UPDATE STOCKS AND TOTALPIZZE
+    // SEND PIZZA
 }
 
 void Reception::manageNewOrder(const std::string &line)
@@ -136,10 +124,10 @@ void Reception::manageNewOrder(const std::string &line)
         std::vector<Pizza> pizze;
 
         while (std::getline(stream, segment, ';'))
-            for (const auto &pizza: parsePizza(segment)) {
-                sendPizzaToKitchen(pizza);
+            for (const auto &pizza: parsePizza(segment))
                 pizze.push_back(pizza);
-            }
+        for (const auto &pizza : pizze)
+            sendPizzaToKitchen(pizza);
         _orders.push_back(pizze);
     } catch (Error &e) {
         std::cerr << e.what() << std::endl;
