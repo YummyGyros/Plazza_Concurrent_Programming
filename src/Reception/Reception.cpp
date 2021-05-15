@@ -21,7 +21,7 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception"), _dogEnd(tru
 {
     auto start = std::chrono::high_resolution_clock::now();
     _logfile.open("logfile.txt");
-    _logfile << "############## Welcome to the Pizzeria Piazza ##############" << std::endl;
+    std::cout <<"############## Welcome to the Pizzeria Piazza ##############" << std::endl;
     _timeMultiplier = std::stof(av[1]);
     _cooksPerKitchen = std::stoi(av[2]);
     _restockTime = std::stoi(av[3]);
@@ -130,7 +130,7 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
         _kitchens.push_back(Kitchen(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp)));
     _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
     _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
-    _logfile << "Order: pizza " << pizzaTypesToString.find(pizza.getPizzaType())->second << " size "
+    std::cout <<"Order: pizza " << pizzaTypesToString.find(pizza.getPizzaType())->second << " size "
     << pizzaSizesToString.find(pizza.getPizzaSize())->second << " sent to the kitchen." << std::endl;
 }
 
@@ -154,30 +154,30 @@ void Reception::manageNewOrder(const std::string &line)
 
 void Reception::displayOrder(const std::vector<Pizza> &pizze)
 {
-    _logfile << "==========================" << std::endl;
-    _logfile << "Order Ready" << std::endl;
-    _logfile << "--------------------------" << std::endl;
+    std::cout <<"==========================" << std::endl;
+    std::cout <<"Order Ready" << std::endl;
+    std::cout <<"--------------------------" << std::endl;
     for (const auto &pizza : pizze) {
-        _logfile << "\tpizza:\ttype:\t" << pizzaTypesToString.find(pizza.getPizzaType())->first
+        std::cout <<"\tpizza:\ttype:\t" << pizzaTypesToString.find(pizza.getPizzaType())->first
         << "\t\tsize:\t" << pizzaSizesToString.find(pizza.getPizzaSize())->first << std::endl;
     }
-    _logfile << "       Buon Appetito      " << std::endl;
-    _logfile << "==========================" << std::endl;
+    std::cout <<"       Buon Appetito      " << std::endl;
+    std::cout <<"==========================" << std::endl;
 }
 
 void Reception::displayStatus()
 {
     if (_kitchens.empty())
-        _logfile << "No kitchen exist at this time." << std::endl;
+        std::cout <<"No kitchen exist at this time." << std::endl;
     else
-        _logfile << "=========Status===========" << std::endl;
+        std::cout <<"=========Status===========" << std::endl;
     for (const auto &kitchen : _kitchens) {
         auto fridge = kitchen.getFridge();
-        _logfile << kitchen.getId() << ":" << std::endl;
-        _logfile << "\tpizze in charge: "<< kitchen.getTotalPizze() << std::endl;
+        std::cout <<kitchen.getId() << ":" << std::endl;
+        std::cout <<"\tpizze in charge: "<< kitchen.getTotalPizze() << std::endl;
         for (auto ingredient : fridge)
-            _logfile << "\t" << ingredient.first << ":\t" << ingredient.second << std::endl;
-        _logfile << "==========================" << std::endl;
+            std::cout <<"\t" << ingredient.first << ":\t" << ingredient.second << std::endl;
+        std::cout <<"==========================" << std::endl;
     }
 }
 
@@ -230,19 +230,14 @@ const MessageQueue &Reception::getMessageQueue() const
     return _msg;
 }
 
-void Reception::restockFridges()
-{
-    for (auto kitchen : _kitchens)
-        kitchen.restockFridge();
-}
-
 std::chrono::_V2::system_clock::time_point Reception::restockClock(std::chrono::_V2::system_clock::time_point start)
 {
     const auto temp = std::chrono::high_resolution_clock::now();
     auto timer = std::chrono::duration_cast<std::chrono::milliseconds>(temp - start);
 
     if (timer.count() >= _restockTime) {
-        restockFridges();
+        for (auto &kitchen : _kitchens)
+            kitchen.restockFridge();
         start = std::chrono::high_resolution_clock::now();
     }
     return start;

@@ -49,12 +49,12 @@ Kitchen::~Kitchen()
 
 void Kitchen::receiveCookedPizza()
 {
-    while (_dogEnd) {
-        try {
-            takeOrders();
-        } catch (CommunicationError &e) {
-        }
-    }
+    // while (_dogEnd) {
+    //     try {
+    //         takeOrders();
+    //     } catch (CommunicationError &e) {
+    //     }
+    // }
 }
 
 bool Kitchen::canCookPizza(const Pizza &pizza) const
@@ -91,6 +91,7 @@ void Kitchen::checkIsAlive(ThreadPool &threads)
 
 void Kitchen::takeOrders()
 {
+    // note a effacer quand vue: pourquoi pas directement le faire dans le try?
     Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
     _queue.push(std::make_pair(pizza.getPizzaType(), pizza.getPizzaSize()));
 }
@@ -138,7 +139,7 @@ const std::size_t &Kitchen::getTotalPizze() const
 
 void Kitchen::restockFridge()
 {
-    for (auto ingr : _fridge)
+    for (auto &ingr : _fridge)
         ingr.second++;
 }
 
