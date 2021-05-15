@@ -15,7 +15,7 @@
 template <class T>
 class SafeQueue {
     public:
-        SafeQueue() : _isCooked(false) {}
+        SafeQueue() = default;
         ~SafeQueue() = default;
 
         void push(T value)

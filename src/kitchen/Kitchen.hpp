@@ -9,7 +9,6 @@
 
 #include <map>
 #include <chrono>
-#include <vector>
 
 #include "Pizza.hpp"
 #include "SafeQueue.hpp"
@@ -24,14 +23,21 @@ class Kitchen {
         ~Kitchen();
 
         void startWork();
-        void checkIsAlive();
+        void checkIsAlive(ThreadPool &);
         bool canCookPizza(const Pizza &pizza) const;
+        void consumeIngredientsForPizza(const Pizza &pizza);
         const MessageQueue &getMessageQueue() const;
         const std::string &getId() const;
         float getTimeMul() const;
         const std::size_t &getNbCooks() const;
         const std::size_t &getRestockTime() const;
         const std::size_t &getTotalPizze() const;
+        const std::unordered_map<ingredients_e, std::size_t> &getFridge() const {
+            return _fridge;
+        };
+        void setFridge(const std::unordered_map<ingredients_e, std::size_t> &fridge) {
+            _fridge = fridge;
+        };
         void takeOrders();
 
     private:
@@ -49,10 +55,6 @@ class Kitchen {
         bool _isAlive;
         int _lifeTime;
 
-        ThreadPool _threads;
         std::unordered_map<ingredients_e, std::size_t> _fridge;
-        int _receptionId;
         SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
-
-        std::map<ingredients_e, int> _fridge;
 };

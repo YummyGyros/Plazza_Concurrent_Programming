@@ -39,7 +39,6 @@ class Reception {
         int checkLastArg(std::string &tmp);
         std::vector<Pizza> parsePizza(const std::string &segment);
 
-        void consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen);
         void sendPizzaToKitchen(const Pizza &pizza);
         void receiveCookedPizza();
 

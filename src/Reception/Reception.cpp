@@ -99,11 +99,6 @@ void Reception::updateShell()
         _shellLine = "";
 }
 
-
-void Reception::consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen)
-{
-}
-
 bool cmp(const Kitchen &lhs, const Kitchen &rhs)
 {
     return lhs.getTotalPizze() < rhs.getTotalPizze();

@@ -22,7 +22,7 @@ enum ingredients_e
     chiefLove
 };
 
-static const std::unordered_map<PizzaType, std::vector<ingredients_e>> Recipe = { 
+static const std::unordered_map<PizzaType, std::vector<ingredients_e>> Recipes = {
     {Regina, {tomato, gruyere}},
     {Margarita, {tomato, gruyere, ham, mushrooms}},
     {Americana, {tomato, gruyere, steak}},
