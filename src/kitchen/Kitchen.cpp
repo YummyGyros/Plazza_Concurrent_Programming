@@ -46,6 +46,12 @@ Kitchen::~Kitchen()
 
 bool Kitchen::canCookPizza(const Pizza &pizza) const
 {
+    auto recipe = Recipe.find(pizza.getPizzaType());
+
+    for (ingredients_e ingr: recipe->second) {
+        if (_fridge.find(ingr)->second == 0)
+            return false;
+    }
     return true;
 }
 
@@ -117,3 +123,8 @@ const std::size_t &Kitchen::getTotalPizze() const
 {
     return _totalPizze;
 }
+
+const std::unordered_map<ingredients_e, std::size_t> &Kitchen::getFridge() const
+{
+    return _fridge;
+};
