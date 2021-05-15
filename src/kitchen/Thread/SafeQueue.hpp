@@ -9,13 +9,13 @@
 
 #include <queue>
 #include <mutex>
-#include <condition_variable>
 #include <chrono>
+#include <condition_variable>
 
 template <class T>
 class SafeQueue {
     public:
-        SafeQueue() = default;
+        SafeQueue() : _isCooked(false) {}
         ~SafeQueue() = default;
 
         void push(T value)

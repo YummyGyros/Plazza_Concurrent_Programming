@@ -14,7 +14,10 @@
 #include <functional>
 
 #include "SafeQueue.hpp"
+#include "Serializing.hpp"
+#include "MessageQueue.cpp"
 #include "PizzaDefinitions.hpp"
+
 
 static const std::map<PizzaType, float> timeToCook = { 
     {Margarita, {1000}},
@@ -26,7 +29,7 @@ static const std::map<PizzaType, float> timeToCook = {
 class ThreadPool {
     public:
         ThreadPool() = default;
-        ThreadPool(float, std::size_t, SafeQueue<std::pair<PizzaType, PizzaSize>> &);
+        ThreadPool(float, std::size_t, SafeQueue<std::pair<PizzaType, PizzaSize>> &, MessageQueue, int);
         ~ThreadPool();
 
         void cook(SafeQueue<std::pair<PizzaType, PizzaSize>> &);
@@ -36,4 +39,7 @@ class ThreadPool {
         int _quantity;
         std::size_t _numberCooks;
         float _timeMultiplier;
+
+        MessageQueue _msg;
+        int _receptionId;
 };

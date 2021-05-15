@@ -69,7 +69,7 @@ void Kitchen::takeOrders()
 void Kitchen::startWork()
 {
     SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
-    ThreadPool _threads(_timeMul, _nbCooks, _queue);
+    ThreadPool _threads(_timeMul, _nbCooks, _queue, _msg, _receptionId);
     _orders = std::thread(&Kitchen::takeOrders, this);
 
     while (_isAlive) {
