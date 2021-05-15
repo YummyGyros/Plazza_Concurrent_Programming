@@ -14,6 +14,7 @@
 
 class Pizza {
     public:
+        Pizza(PizzaType _type, PizzaSize _size);
         Pizza();
         Pizza(const Pizza &pizza);
         ~Pizza() = default;
