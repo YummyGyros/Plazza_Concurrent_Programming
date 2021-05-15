@@ -126,11 +126,11 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
             kitchensCanCook.push_back(kitchen);
 
     if (kitchensCanCook.empty())
-        _kitchens.emplace_back(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
+        _kitchens.push_back(Kitchen(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid()));
     else
-        _kitchens.emplace_back(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp));
-    _kitchens.end()->takePizzaInCharge(pizza);
-    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.end()->getMessageQueue().getMsgid());
+        _kitchens.push_back(Kitchen(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp)));
+    _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
+    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
 }
 
 void Reception::manageNewOrder(const std::string &line)
@@ -230,7 +230,7 @@ void Reception::addKitchen()
 
 void Reception::deleteKitchen(const std::string &id)
 {
-    // _kitchens.erase(std::remove_if(_kitchens.begin(), _kitchens.end(), [&id](Kitchen &kitchen){return (id == kitchen.getId());}));
+    // _kitchens.erase(std::remove_if(_kitchens.begin(), _kitchens.at(_kitchens.size() - 1), [&id](Kitchen &kitchen){return (id == kitchen.getId());}));
 }
 
 void Reception::restockFridges()
