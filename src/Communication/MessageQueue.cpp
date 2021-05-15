@@ -33,3 +33,8 @@ MessageQueue::~MessageQueue()
     msgctl(_msgid, IPC_RMID, NULL);
     std::remove(_communicationFile.c_str());
 }
+
+const std::string &MessageQueue::getFile() const
+{
+    return _communicationFile;
+}
