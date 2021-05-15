@@ -32,7 +32,7 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
             else if (_shellLine.compare("exit") == 0)
                 break;
             else
-                parseNewOrder(_shellLine);
+                manageNewOrder(_shellLine);
         }
         manageOrders();
     }
@@ -113,13 +113,19 @@ void Reception::manageOrders()
     //      --> if none can be found, create new kitchen: Kitchen("Kitchen" + _nbKitchen)
     //  - send pizza packed to kitchen
     //  - receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
-
-    //RECEIVE PIZZE FROM KITCHEN:
-    //  std::vector<std::vector<Pizza> pizze> orders;
-    //  - through orders, find first pizza of received type for which isCooked == false
 }
 
-void Reception::parseNewOrder(const std::string &line)
+// bool cmp(const Kitchen &lhs, const Kitchen &rhs)
+// {
+//     return lhs.getTotalPizze() < rhs.getTotalPizze();
+// }
+
+void Reception::sendPizzaToKitchen(const Pizza &pizza)
+{
+    // auto max = std::min_element(_kitchens.begin(), _kitchens.end(), cmp);
+}
+
+void Reception::manageNewOrder(const std::string &line)
 {
     try {
         std::stringstream stream(line);
@@ -127,8 +133,10 @@ void Reception::parseNewOrder(const std::string &line)
         std::vector<Pizza> pizze;
 
         while (std::getline(stream, segment, ';'))
-                for (const auto &pizza: parsePizza(segment))
-                    pizze.push_back(pizza);
+            for (const auto &pizza: parsePizza(segment)) {
+                sendPizzaToKitchen(pizza);
+                pizze.push_back(pizza);
+            }
         _orders.push_back(pizze);
     } catch (Error &e) {
         std::cerr << e.what() << std::endl;
@@ -149,6 +157,8 @@ void Reception::displayOrder(const std::vector<Pizza> &pizze)
 void Reception::displayStatus()
 {
     std::cout << "Status information should be displayed here." << std::endl;
+    // iterate through _kitchens
+    // display stock and chiefs occupancy
 }
 
 int Reception::checkLastArg(std::string &tmp)

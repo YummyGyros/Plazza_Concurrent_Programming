@@ -47,7 +47,7 @@ class Kitchen {
         int _lifeTime;
 
         ThreadPool _threads;
-        std::map<ingredients_e, std::size_t> _fridge;
+        std::unordered_map<ingredients_e, std::size_t> _fridge;
         int _receptionId;
         SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
 };
