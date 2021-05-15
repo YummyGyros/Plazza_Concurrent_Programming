@@ -104,10 +104,10 @@ void Reception::consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen)
 {
 }
 
-// bool cmp(const Kitchen &lhs, const Kitchen &rhs)
-// {
-//     return lhs.getTotalPizze() < rhs.getTotalPizze();
-// }
+bool cmp(const Kitchen &lhs, const Kitchen &rhs)
+{
+    return lhs.getTotalPizze() < rhs.getTotalPizze();
+}
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
@@ -115,15 +115,16 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
     //      -->  if none --> createKitchen
     // UPDATE STOCKS AND TOTALPIZZE
     // SEND PIZZA
-    // auto min = *std::min_element(_kitchens.begin(), _kitchens.end(), [](){return cmp});
-    // std::cout << "kitchen with minimum total pizze: " << min.getId() << std::endl;
-    // std::size_t min = 0;
-    // std::vector<Kitchen> tmpForMinimum;
+    // std::vector<Kitchen> kitchensCanCook;
 
-    // for (const auto &kitchen : _kitchens)
+    // for (const auto kitchen : _kitchens)
     //     if (kitchen.canCookPizza(pizza))
-    //         tmpForMinimum.push_back(kitchen);
-    // auto min = std::min_element(tmpForMinimum.begin(), tmpForMinimum.end(), cmp);
+    //         kitchensCanCook.push_back(kitchen);
+
+    // if (kitchensCanCook.empty())
+    //     Kitchen chosenOne(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
+    // else
+    //     auto chosenOne  = *std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp);
 }
 
 void Reception::manageNewOrder(const std::string &line)
@@ -160,9 +161,6 @@ void Reception::displayStatus()
     std::cout << "Status information should be displayed here." << std::endl;
     // iterate through _kitchens
     // // display stock and chiefs occupancy
-    // std::vector<int> _numbers = { 3, 1, 2, 7, 4, 0, 9};
-    // auto min = *std::min_element(_numbers.begin(), _numbers.end());
-    // std::cout << "int min: " << min << std::endl;
 }
 
 int Reception::checkLastArg(std::string &tmp)
