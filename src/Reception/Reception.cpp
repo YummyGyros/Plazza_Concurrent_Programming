@@ -26,12 +26,14 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
 
     while (1) {
         updateShell();
-        if (_shellLine.compare("status") == 0)
-            displayStatus();
-        else if (_shellLine.compare("exit") == 0)
-            break;
-        else if (_shellLine.compare("") != 0)
-            parseNewOrder(_shellLine);
+        if (_shellLine.compare("") != 0) {
+            if (_shellLine.compare("status") == 0)
+                displayStatus();
+            else if (_shellLine.compare("exit") == 0)
+                break;
+            else
+                parseNewOrder(_shellLine);
+        }
         manageOrders();
     }
 }
