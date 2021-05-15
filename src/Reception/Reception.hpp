@@ -44,7 +44,6 @@ class Reception {
         void sendPizzaToKitchen(const Pizza &pizza);
         void receiveCookedPizza();
 
-
         std::string _shellLine;
 
         float _timeMultiplier;
@@ -60,6 +59,8 @@ class Reception {
         std::thread _thread;
         Serializing _srl;
         std::vector<Pizza> _finishedPizze;
+
+        bool _dogEnd;
 };
 
 #endif /* !RECEPTION_HPP_ */
