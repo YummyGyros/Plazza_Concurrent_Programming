@@ -230,17 +230,6 @@ const MessageQueue &Reception::getMessageQueue() const
     return _msg;
 }
 
-void Reception::addKitchen()
-{
-    _kitchensId++;
-    _kitchens.emplace_back(std::to_string(_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
-}
-
-void Reception::deleteKitchen(const std::string &id)
-{
-    // _kitchens.erase(std::remove_if(_kitchens.begin(), _kitchens.at(_kitchens.size() - 1), [&id](Kitchen &kitchen){return (id == kitchen.getId());}));
-}
-
 void Reception::restockFridges()
 {
     for (auto kitchen : _kitchens)

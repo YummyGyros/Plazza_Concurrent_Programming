@@ -29,8 +29,6 @@ class Reception {
         std::size_t getRestockTime() const;
 
         const MessageQueue &getMessageQueue() const;
-        void addKitchen();
-        void deleteKitchen(const std::string &id);
         void restockFridges();
         std::chrono::_V2::system_clock::time_point restockClock
         (std::chrono::_V2::system_clock::time_point);
