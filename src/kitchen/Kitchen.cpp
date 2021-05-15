@@ -123,3 +123,9 @@ const std::size_t &Kitchen::getTotalPizze() const
 {
     return _totalPizze;
 }
+
+void Kitchen::restockFridge()
+{
+    for (auto ingr : _fridge)
+        ingr.second++;
+}
