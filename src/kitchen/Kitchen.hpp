@@ -31,12 +31,6 @@ class Kitchen {
         const std::size_t &getNbCooks() const;
         const std::size_t &getRestockTime() const;
         const std::size_t &getTotalPizze() const;
-        const std::unordered_map<ingredients_e, std::size_t> &getFridge() const {
-            return _fridge;
-        };
-        void setFridge(const std::unordered_map<ingredients_e, std::size_t> &fridge) {
-            _fridge = fridge;
-        };
         void takeOrders();
 
     private:
