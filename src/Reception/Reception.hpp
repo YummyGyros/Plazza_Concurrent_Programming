@@ -36,8 +36,9 @@ class Reception {
         void updateShell();
         int checkLastArg(std::string &tmp);
 
-        void parseNewOrder(const std::string &line);
+        void manageNewOrder(const std::string &line);
         std::vector<Pizza> parsePizza(const std::string &segment);
+        void sendPizzaToKitchen(const Pizza &pizza);
         void receiveCookedPizza();
 
         std::string _shellLine;

@@ -22,7 +22,7 @@ enum ingredients_e
     chiefLove
 };
 
-static const std::map<PizzaType, std::vector<ingredients_e>> Recipe = { 
+static const std::unordered_map<PizzaType, std::vector<ingredients_e>> Recipe = { 
     {Regina, {tomato, gruyere}},
     {Margarita, {tomato, gruyere, ham, mushrooms}},
     {Americana, {tomato, gruyere, steak}},
@@ -35,10 +35,10 @@ class Serializing {
         ~Serializing();
 
         pizza_order_t pack(Pizza pizza);
-        status_t pack(std::map<ingredients_e, std::size_t> stock);
+        status_t pack(std::unordered_map<ingredients_e, std::size_t> stock);
 
         Pizza unpack(pizza_order_t pizza);
-        std::map<ingredients_e, std::size_t> unpack(status_t stock);
+        std::unordered_map<ingredients_e, std::size_t> unpack(status_t stock);
 
     protected:
     private:

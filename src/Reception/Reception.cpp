@@ -26,12 +26,14 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
 
     while (1) {
         updateShell();
-        if (_shellLine.compare("status") == 0)
-            displayStatus();
-        else if (_shellLine.compare("exit") == 0)
-            break;
-        else if (_shellLine.compare("") != 0)
-            parseNewOrder(_shellLine);
+        if (_shellLine.compare("") != 0) {
+            if (_shellLine.compare("status") == 0)
+                displayStatus();
+            else if (_shellLine.compare("exit") == 0)
+                break;
+            else
+                manageNewOrder(_shellLine);
+        }
         manageOrders();
     }
 }
@@ -103,21 +105,30 @@ void Reception::manageOrders()
     // for (auto const &order : _orders)
     //     for (auto const &pizza : order)
     //         std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
+}
 
+// bool cmp(const Kitchen &lhs, const Kitchen &rhs)
+// {
+//     return lhs.getTotalPizze() < rhs.getTotalPizze();
+// }
+
+void Reception::sendPizzaToKitchen(const Pizza &pizza)
+{
     // create: bool canCookPizza(PizzaType, stock)
 
     //ORDER RECEPTION:
     //  - find kitchen: able to craft with stock / lowest totalPizze of all
     //      --> if none can be found, create new kitchen: Kitchen("Kitchen" + _nbKitchen)
-    //  - send pizza packed to kitchen
-    //  - receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
 
-    //RECEIVE PIZZE FROM KITCHEN:
-    //  std::vector<std::vector<Pizza> pizze> orders;
-    //  - through orders, find first pizza of received type for which isCooked == false
+    //  - EITHER:
+    //      - update _stocks, _totalPizze and send pizza packed to kitchen
+    //      - send pizza packed to kitchen and receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
+
+
+    // auto max = std::min_element(_kitchens.begin(), _kitchens.end(), cmp);
 }
 
-void Reception::parseNewOrder(const std::string &line)
+void Reception::manageNewOrder(const std::string &line)
 {
     try {
         std::stringstream stream(line);
@@ -125,8 +136,10 @@ void Reception::parseNewOrder(const std::string &line)
         std::vector<Pizza> pizze;
 
         while (std::getline(stream, segment, ';'))
-                for (const auto &pizza: parsePizza(segment))
-                    pizze.push_back(pizza);
+            for (const auto &pizza: parsePizza(segment)) {
+                sendPizzaToKitchen(pizza);
+                pizze.push_back(pizza);
+            }
         _orders.push_back(pizze);
     } catch (Error &e) {
         std::cerr << e.what() << std::endl;
@@ -147,6 +160,8 @@ void Reception::displayOrder(const std::vector<Pizza> &pizze)
 void Reception::displayStatus()
 {
     std::cout << "Status information should be displayed here." << std::endl;
+    // iterate through _kitchens
+    // display stock and chiefs occupancy
 }
 
 int Reception::checkLastArg(std::string &tmp)

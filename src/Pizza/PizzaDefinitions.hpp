@@ -8,7 +8,7 @@
 #ifndef PIZZADEFINITIONS_HPP_
 #define PIZZADEFINITIONS_HPP_
 
-#include <map>
+#include <unordered_map>
 #include <string>
 
 enum PizzaType
@@ -28,14 +28,14 @@ enum PizzaSize
     XXL = 16
 };
 
-const std::map<std::string, PizzaType> pizzaTypes = {
+const std::unordered_map<std::string, PizzaType> pizzaTypes = {
     { "regina", Regina },
     { "margarita", Margarita },
     { "americana", Americana },
     { "fantasia", Fantasia }
 };
 
-const std::map<std::string, PizzaSize> pizzaSizes = {
+const std::unordered_map<std::string, PizzaSize> pizzaSizes = {
     { "S", S },
     { "M", M },
     { "L", L },

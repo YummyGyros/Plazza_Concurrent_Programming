@@ -18,8 +18,7 @@
 #include "MessageQueue.cpp"
 #include "PizzaDefinitions.hpp"
 
-
-static const std::map<PizzaType, float> timeToCook = { 
+static const std::unordered_map<PizzaType, float> timeToCook = {
     {Margarita, {1000}},
     {Regina, {2000}},
     {Americana, {2000}},

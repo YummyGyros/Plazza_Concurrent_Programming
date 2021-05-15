@@ -62,6 +62,7 @@ class MessageQueue {
         }
 
         int getMsgid();
+        const std::string &getFile() const;
     protected:
     private:
         int _msgid;
