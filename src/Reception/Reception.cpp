@@ -119,8 +119,10 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
     //ORDER RECEPTION:
     //  - find kitchen: able to craft with stock / lowest totalPizze of all
     //      --> if none can be found, create new kitchen: Kitchen("Kitchen" + _nbKitchen)
-    //  - send pizza packed to kitchen
-    //  - receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
+
+    //  - EITHER:
+    //      - update _stocks, _totalPizze and send pizza packed to kitchen
+    //      - send pizza packed to kitchen and receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
 
 
     // auto max = std::min_element(_kitchens.begin(), _kitchens.end(), cmp);
