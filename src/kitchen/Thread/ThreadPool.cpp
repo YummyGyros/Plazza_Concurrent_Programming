@@ -24,7 +24,7 @@ void ThreadPool::cook(SafeQueue<std::pair<PizzaType, PizzaSize>> &queue)
 }
 
 ThreadPool::ThreadPool(float timeMult, std::size_t numberCooks, SafeQueue<std::pair<PizzaType, PizzaSize>> &queue, MessageQueue id, int rid)
-    : _timeMultiplier(timeMult), _numberCooks(numberCooks), _receptionId(rid), _msg(id.getCommunicationFile())
+    : _timeMultiplier(timeMult), _numberCooks(numberCooks), _receptionId(rid), _msg(id.getFile())
 {
     int n = 0;
 
