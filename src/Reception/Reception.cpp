@@ -105,15 +105,24 @@ bool Reception::canCookPizza(const Pizza &pizza, const Kitchen &kitchen)
 
 void Reception::consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen)
 {
+    auto recipe = Recipe.find(pizza.getPizzaType());
+    std::unordered_map<ingredients_e, std::size_t> fridge = kitchen.getFridge();
 
+    for (ingredients_e ingr: recipe->second) {
+        fridge[ingr] -= 1;
+    }
+    kitchen.setFridge(fridge);
 }
+
+// static const std::unordered_map<PizzaType, std::vector<ingredients_e>> Recipe = { 
+//     {Regina, {tomato, gruyere}},
+//     {Margarita, {tomato, gruyere, ham, mushrooms}},
+//     {Americana, {tomato, gruyere, steak}},
+//     {Fantasia, {tomato, eggplant, goatCheese, chiefLove}}
+// };
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
-    // FIND KITCHEN: canCookPizza() == true && lowest totalPizze of all.
-    //      -->  if none --> createKitchen
-    // UPDATE STOCKS AND TOTALPIZZE
-    // SEND PIZZA
 }
 
 void Reception::manageNewOrder(const std::string &line)
