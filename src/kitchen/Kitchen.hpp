@@ -25,7 +25,7 @@ class Kitchen {
         void startWork();
         void checkIsAlive(ThreadPool &);
         bool canCookPizza(const Pizza &pizza) const;
-        void consumeIngredientsForPizza(const Pizza &pizza);
+        void takePizzaInCharge(const Pizza &pizza);
         const MessageQueue &getMessageQueue() const;
         const std::string &getId() const;
         float getTimeMul() const;
