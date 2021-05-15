@@ -144,16 +144,20 @@ void Reception::displayOrder(const std::vector<Pizza> &pizze)
     std::cout << "Order Ready" << std::endl;
     std::cout << "--------------------------" << std::endl;
     for (const auto &pizza : pizze) {
-        std::cout << "pizza:\ttype:\t" << pizza.getPizzaType() << "\t\tsize:\t" << pizza.getPizzaSize() << std::endl;
+        std::cout << "\tpizza:\ttype:\t" << pizza.getPizzaType() << "\t\tsize:\t" << pizza.getPizzaSize() << std::endl;
     }
     std::cout << "==========================" << std::endl;
 }
 
 void Reception::displayStatus()
 {
-    std::cout << "Status information should be displayed here." << std::endl;
-    // iterate through _kitchens
-    // // display stock and chiefs occupancy
+    if (_kitchens.empty())
+        std::cout << "No kitchen exist at this time." << std::endl;
+    for (const auto &kitchen : _kitchens) {
+        std::cout << kitchen.getId() << std::endl;
+        std::cout << "\t pizze in charge: "<< kitchen.getTotalPizze() << std::endl;
+        std::cout << "[stocks should be displayed here]" << std::endl;
+    }
 }
 
 int Reception::checkLastArg(std::string &tmp)
