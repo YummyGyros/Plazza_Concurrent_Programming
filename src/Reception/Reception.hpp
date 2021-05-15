@@ -14,6 +14,7 @@
 #include <thread>
 #include <chrono>
 #include <ratio>
+#include <fstream>
 
 #include "Pizza.hpp"
 #include "Kitchen.hpp"
@@ -63,6 +64,8 @@ class Reception {
         std::thread _thread;
         Serializing _srl;
         std::vector<Pizza> _finishedPizze;
+
+        std::ofstream _logfile;
 };
 
 #endif /* !RECEPTION_HPP_ */

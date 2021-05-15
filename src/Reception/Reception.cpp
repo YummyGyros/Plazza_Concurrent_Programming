@@ -20,6 +20,8 @@
 Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
 {
     auto start = std::chrono::high_resolution_clock::now();
+    _logfile.open("logfile.txt");
+    _logfile << "############## Welcome to the Pizzeria Piazza ##############" << std::endl;
     _timeMultiplier = std::stof(av[1]);
     _cooksPerKitchen = std::stoi(av[2]);
     _restockTime = std::stoi(av[3]);
@@ -46,6 +48,7 @@ Reception::~Reception()
         order.clear();
     _orders.clear();
     _kitchens.clear();
+    _logfile.close();
 }
 
 void Reception::receiveCookedPizza()
@@ -142,23 +145,23 @@ void Reception::manageNewOrder(const std::string &line)
 
 void Reception::displayOrder(const std::vector<Pizza> &pizze)
 {
-    std::cout << "==========================" << std::endl;
-    std::cout << "Order Ready" << std::endl;
-    std::cout << "--------------------------" << std::endl;
+    _logfile << "==========================" << std::endl;
+    _logfile << "Order Ready" << std::endl;
+    _logfile << "--------------------------" << std::endl;
     for (const auto &pizza : pizze) {
-        std::cout << "\tpizza:\ttype:\t" << pizza.getPizzaType() << "\t\tsize:\t" << pizza.getPizzaSize() << std::endl;
+        _logfile << "\tpizza:\ttype:\t" << pizza.getPizzaType() << "\t\tsize:\t" << pizza.getPizzaSize() << std::endl;
     }
-    std::cout << "==========================" << std::endl;
+    _logfile << "==========================" << std::endl;
 }
 
 void Reception::displayStatus()
 {
     if (_kitchens.empty())
-        std::cout << "No kitchen exist at this time." << std::endl;
+        _logfile << "No kitchen exist at this time." << std::endl;
     for (const auto &kitchen : _kitchens) {
-        std::cout << kitchen.getId() << std::endl;
-        std::cout << "\t pizze in charge: "<< kitchen.getTotalPizze() << std::endl;
-        std::cout << "[stocks should be displayed here]" << std::endl;
+        _logfile << kitchen.getId() << std::endl;
+        _logfile << "\t pizze in charge: "<< kitchen.getTotalPizze() << std::endl;
+        _logfile << "[stocks should be displayed here]" << std::endl;
     }
 }
 
@@ -234,7 +237,6 @@ std::chrono::_V2::system_clock::time_point Reception::restockClock(std::chrono::
     auto timer = std::chrono::duration_cast<std::chrono::milliseconds>(temp - start);
 
     if (timer.count() >= _restockTime) {
-        std::cout << _restockTime << std::endl;
         restockFridges();
         start = std::chrono::high_resolution_clock::now();
     }
