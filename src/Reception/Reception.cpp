@@ -105,14 +105,6 @@ void Reception::manageOrders()
     // for (auto const &order : _orders)
     //     for (auto const &pizza : order)
     //         std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
-
-    // create: bool canCookPizza(PizzaType, stock)
-
-    //ORDER RECEPTION:
-    //  - find kitchen: able to craft with stock / lowest totalPizze of all
-    //      --> if none can be found, create new kitchen: Kitchen("Kitchen" + _nbKitchen)
-    //  - send pizza packed to kitchen
-    //  - receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
 }
 
 // bool cmp(const Kitchen &lhs, const Kitchen &rhs)
@@ -122,6 +114,15 @@ void Reception::manageOrders()
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
+    // create: bool canCookPizza(PizzaType, stock)
+
+    //ORDER RECEPTION:
+    //  - find kitchen: able to craft with stock / lowest totalPizze of all
+    //      --> if none can be found, create new kitchen: Kitchen("Kitchen" + _nbKitchen)
+    //  - send pizza packed to kitchen
+    //  - receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
+
+
     // auto max = std::min_element(_kitchens.begin(), _kitchens.end(), cmp);
 }
 
