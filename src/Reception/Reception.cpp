@@ -102,13 +102,13 @@ void Reception::updateShell()
 
 void Reception::consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen)
 {
-    // auto recipe = Recipe.find(pizza.getPizzaType());
-    // std::unordered_map<ingredients_e, std::size_t> fridge = kitchen.getFridge();
+    auto recipe = Recipe.find(pizza.getPizzaType());
+    std::unordered_map<ingredients_e, std::size_t> fridge = kitchen.getFridge();
 
-    // for (ingredients_e ingr: recipe->second) {
-    //     fridge[ingr] -= 1;
-    // }
-    // kitchen.setFridge(fridge);
+    for (ingredients_e ingr: recipe->second) {
+        fridge[ingr] -= 1;
+    }
+    kitchen.setFridge(fridge);
 }
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
