@@ -8,14 +8,13 @@
 #pragma once
 
 #include <thread>
-#include <vector>
 #include <chrono>
 #include <utility>
 #include <functional>
 
 #include "SafeQueue.hpp"
 #include "Serializing.hpp"
-#include "MessageQueue.cpp"
+#include "MessageQueue.hpp"
 #include "PizzaDefinitions.hpp"
 
 static const std::unordered_map<PizzaType, float> timeToCook = {
@@ -27,7 +26,6 @@ static const std::unordered_map<PizzaType, float> timeToCook = {
 
 class ThreadPool {
     public:
-        ThreadPool() = default;
         ThreadPool(float, std::size_t, SafeQueue<std::pair<PizzaType, PizzaSize>> &, MessageQueue, int);
         ~ThreadPool();
 

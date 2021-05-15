@@ -44,7 +44,7 @@ Kitchen::~Kitchen()
 {
 }
 
-void Kitchen::checkIsAlive()
+void Kitchen::checkIsAlive(ThreadPool &threads)
 {
     static auto start = std::chrono::steady_clock::now();
     auto end = std::chrono::steady_clock::now();
@@ -69,11 +69,11 @@ void Kitchen::takeOrders()
 void Kitchen::startWork()
 {
     SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
-    ThreadPool _threads(_timeMul, _nbCooks, _queue, _msg, _receptionId);
+    ThreadPool threads(_timeMul, _nbCooks, _queue, _msg, _receptionId);
     _orders = std::thread(&Kitchen::takeOrders, this);
 
     while (_isAlive) {
-        checkIsAlive();
+        checkIsAlive(threads);
     }
 }
 
