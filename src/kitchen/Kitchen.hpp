@@ -23,12 +23,14 @@ class Kitchen {
         ~Kitchen();
 
         void startWork();
-        void checkIsAlive(ThreadPool&);
+        void checkIsAlive(ThreadPool &);
+        bool canCookPizza(const Pizza &pizza) const;
         const MessageQueue &getMessageQueue() const;
         const std::string &getId() const;
         float getTimeMul() const;
         const std::size_t &getNbCooks() const;
         const std::size_t &getRestockTime() const;
+        const std::size_t &getTotalPizze() const;
         void takeOrders();
 
     private:

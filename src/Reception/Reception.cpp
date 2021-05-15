@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <utility>
 
 #include <sys/select.h>
 #include <sys/time.h>
@@ -34,7 +35,6 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
             else
                 manageNewOrder(_shellLine);
         }
-        manageOrders();
     }
 }
 
@@ -99,33 +99,20 @@ void Reception::updateShell()
         _shellLine = "";
 }
 
-void Reception::manageOrders()
-{
-    //_orders DISPLAY:
-    // for (auto const &order : _orders)
-    //     for (auto const &pizza : order)
-    //         std::cout << "Pizza:\n\ttype:\t" << pizza.getPizzaType() << "\n\tsize:\t" << pizza.getPizzaSize() << std::endl;
-}
 
-// bool cmp(const Kitchen &lhs, const Kitchen &rhs)
-// {
-//     return lhs.getTotalPizze() < rhs.getTotalPizze();
-// }
+void Reception::consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen)
+{
+    // auto recipe = Recipe.find(pizza.getPizzaType());
+    // std::unordered_map<ingredients_e, std::size_t> fridge = kitchen.getFridge();
+
+    // for (ingredients_e ingr: recipe->second) {
+    //     fridge[ingr] -= 1;
+    // }
+    // kitchen.setFridge(fridge);
+}
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
-    // create: bool canCookPizza(PizzaType, stock)
-
-    //ORDER RECEPTION:
-    //  - find kitchen: able to craft with stock / lowest totalPizze of all
-    //      --> if none can be found, create new kitchen: Kitchen("Kitchen" + _nbKitchen)
-
-    //  - EITHER:
-    //      - update _stocks, _totalPizze and send pizza packed to kitchen
-    //      - send pizza packed to kitchen and receive kitchen answer: unpack and update stocks and totalPizze in _kitchens
-
-
-    // auto max = std::min_element(_kitchens.begin(), _kitchens.end(), cmp);
 }
 
 void Reception::manageNewOrder(const std::string &line)
@@ -136,10 +123,10 @@ void Reception::manageNewOrder(const std::string &line)
         std::vector<Pizza> pizze;
 
         while (std::getline(stream, segment, ';'))
-            for (const auto &pizza: parsePizza(segment)) {
-                sendPizzaToKitchen(pizza);
+            for (const auto &pizza: parsePizza(segment))
                 pizze.push_back(pizza);
-            }
+        for (const auto &pizza : pizze)
+            sendPizzaToKitchen(pizza);
         _orders.push_back(pizze);
     } catch (Error &e) {
         std::cerr << e.what() << std::endl;
@@ -161,7 +148,10 @@ void Reception::displayStatus()
 {
     std::cout << "Status information should be displayed here." << std::endl;
     // iterate through _kitchens
-    // display stock and chiefs occupancy
+    // // display stock and chiefs occupancy
+    // std::vector<int> _numbers = { 3, 1, 2, 7, 4, 0, 9};
+    // auto min = *std::min_element(_numbers.begin(), _numbers.end());
+    // std::cout << "int min: " << min << std::endl;
 }
 
 int Reception::checkLastArg(std::string &tmp)

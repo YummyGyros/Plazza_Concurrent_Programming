@@ -44,6 +44,11 @@ Kitchen::~Kitchen()
 {
 }
 
+bool Kitchen::canCookPizza(const Pizza &pizza) const
+{
+    return true;
+}
+
 void Kitchen::checkIsAlive(ThreadPool &threads)
 {
     static auto start = std::chrono::steady_clock::now();
@@ -100,4 +105,9 @@ const std::size_t &Kitchen::getNbCooks() const
 const std::size_t &Kitchen::getRestockTime() const
 {
     return _restockTime;
+}
+
+const std::size_t &Kitchen::getTotalPizze() const
+{
+    return _totalPizze;
 }

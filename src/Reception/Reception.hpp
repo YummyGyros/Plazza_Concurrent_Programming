@@ -32,14 +32,17 @@ class Reception {
     private:
         void displayOrder(const std::vector<Pizza> &pizze);
         void displayStatus();
-        void manageOrders();
+
         void updateShell();
-        int checkLastArg(std::string &tmp);
 
         void manageNewOrder(const std::string &line);
+        int checkLastArg(std::string &tmp);
         std::vector<Pizza> parsePizza(const std::string &segment);
+
+        void consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen);
         void sendPizzaToKitchen(const Pizza &pizza);
         void receiveCookedPizza();
+
 
         std::string _shellLine;
 
