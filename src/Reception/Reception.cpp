@@ -112,20 +112,18 @@ bool cmp(const Kitchen &lhs, const Kitchen &rhs)
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
-    // FIND KITCHEN: canCookPizza() == true && lowest totalPizze of all.
-    //      -->  if none --> createKitchen
-    // UPDATE STOCKS AND TOTALPIZZE
-    // SEND PIZZA
-    // std::vector<Kitchen> kitchensCanCook;
+    std::vector<Kitchen> kitchensCanCook;
 
-    // for (const auto kitchen : _kitchens)
-    //     if (kitchen.canCookPizza(pizza))
-    //         kitchensCanCook.push_back(kitchen);
+    for (const auto kitchen : _kitchens)
+        if (kitchen.canCookPizza(pizza))
+            kitchensCanCook.push_back(kitchen);
 
-    // if (kitchensCanCook.empty())
-    //     Kitchen chosenOne(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
-    // else
-    //     auto chosenOne  = *std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp);
+    if (kitchensCanCook.empty())
+        _kitchens.emplace_back(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
+    else
+        _kitchens.emplace_back(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp));
+    _kitchens.end()->takePizzaInCharge(pizza);
+    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.end()->getMessageQueue().getMsgid());
 }
 
 void Reception::manageNewOrder(const std::string &line)

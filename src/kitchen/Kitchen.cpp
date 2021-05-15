@@ -55,10 +55,11 @@ bool Kitchen::canCookPizza(const Pizza &pizza) const
     return true;
 }
 
-void Kitchen::consumeIngredientsForPizza(const Pizza &pizza)
+void Kitchen::takePizzaInCharge(const Pizza &pizza)
 {
     for (ingredients_e ingr: Recipes.find(pizza.getPizzaType())->second)
         _fridge[ingr] -= 1;
+    _totalPizze++;
 }
 
 void Kitchen::checkIsAlive(ThreadPool &threads)
