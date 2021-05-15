@@ -19,7 +19,7 @@
 
 Reception::Reception(char **av) : _shellLine(""), _msg("Reception"), _dogEnd(true)
 {
-    auto start = std::chrono::steady_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
     _timeMultiplier = std::stof(av[1]);
     _cooksPerKitchen = std::stoi(av[2]);
     _restockTime = std::stoi(av[3]);
@@ -27,11 +27,7 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception"), _dogEnd(tru
     _thread = std::thread(&Reception::receiveCookedPizza, this);
 
     while (1) {
-        const auto temp = std::chrono::steady_clock::now();
-        if ((temp - start).count() >= _restockTime) {
-            restockFridges();
-            start = std::chrono::steady_clock::now();
-        }
+        start = restockClock(start);
         updateShell();
         if (_shellLine.compare("") != 0) {
             if (_shellLine.compare("status") == 0)
@@ -238,4 +234,17 @@ void Reception::restockFridges()
 {
     for (auto kitchen : _kitchens)
         kitchen.restockFridge();
+}
+
+std::chrono::_V2::system_clock::time_point Reception::restockClock(std::chrono::_V2::system_clock::time_point start)
+{
+    const auto temp = std::chrono::high_resolution_clock::now();
+    auto timer = std::chrono::duration_cast<std::chrono::milliseconds>(temp - start);
+
+    if (timer.count() >= _restockTime) {
+        std::cout << _restockTime << std::endl;
+        restockFridges();
+        start = std::chrono::high_resolution_clock::now();
+    }
+    return start;
 }

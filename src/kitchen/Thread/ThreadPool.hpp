@@ -12,6 +12,7 @@
 #include <utility>
 #include <functional>
 
+#include "Pizza.hpp"
 #include "SafeQueue.hpp"
 #include "Serializing.hpp"
 #include "MessageQueue.hpp"
@@ -39,4 +40,5 @@ class ThreadPool {
 
         MessageQueue _msg;
         int _receptionId;
+        Serializing _srl;
 };
