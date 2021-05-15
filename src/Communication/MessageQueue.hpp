@@ -58,7 +58,6 @@ class MessageQueue {
 
             if (msgrcv(_msgid, &pizza, sizeof(T), 1, 0) == -1)
                 throw CommunicationError("msgrcv failed.");
-            std::cout << pizza.type << ": " << pizza.size << std::endl;
             return pizza;
         }
 

@@ -25,7 +25,6 @@ MessageQueue::MessageQueue(const std::string &name)
     _msgid = msgget(key, 0666 | IPC_CREAT);
     if (_msgid == -1)
         throw CommunicationError("msgget failed.");
-    std::cout << _msgid << std::endl;
 }
 
 MessageQueue::MessageQueue(const MessageQueue &queue)
