@@ -42,6 +42,7 @@ typedef struct status_s {
 class MessageQueue {
     public:
         MessageQueue(const std::string &name);
+        MessageQueue(const MessageQueue &queue);
         ~MessageQueue();
 
         template<typename T>
@@ -61,7 +62,7 @@ class MessageQueue {
             return pizza;
         }
 
-        int getMsgid();
+        int getMsgid() const;
         const std::string &getFile() const;
     protected:
     private:

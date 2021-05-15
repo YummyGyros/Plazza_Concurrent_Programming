@@ -7,7 +7,7 @@
 
 #include "MessageQueue.hpp"
 
-int MessageQueue::getMsgid()
+int MessageQueue::getMsgid() const
 {
     return _msgid;
 }
@@ -26,6 +26,12 @@ MessageQueue::MessageQueue(const std::string &name)
     if (_msgid == -1)
         throw CommunicationError("msgget failed.");
     std::cout << _msgid << std::endl;
+}
+
+MessageQueue::MessageQueue(const MessageQueue &queue)
+{
+    _msgid = queue.getMsgid();
+    _communicationFile = queue.getFile();
 }
 
 MessageQueue::~MessageQueue()
