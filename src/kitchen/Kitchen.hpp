@@ -34,6 +34,7 @@ class Kitchen {
         const std::size_t &getTotalPizze() const;
         void takeOrders();
         void restockFridge();
+        const std::unordered_map<ingredients_e, std::size_t> &getFridge() const;
 
     private:
         std::string _id;

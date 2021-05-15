@@ -130,3 +130,8 @@ void Kitchen::restockFridge()
     for (auto ingr : _fridge)
         ingr.second++;
 }
+
+const std::unordered_map<ingredients_e, std::size_t> &Kitchen::getFridge() const
+{
+    return _fridge;
+}
