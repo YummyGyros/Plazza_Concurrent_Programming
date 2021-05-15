@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include <thread>
+#include <chrono>
 
 #include "Pizza.hpp"
 #include "Kitchen.hpp"
@@ -28,6 +29,7 @@ class Reception {
         const MessageQueue &getMessageQueue() const;
         void addKitchen();
         void deleteKitchen(const std::string &id);
+        void restockFridges();
     protected:
     private:
         void displayOrder(const std::vector<Pizza> &pizze);

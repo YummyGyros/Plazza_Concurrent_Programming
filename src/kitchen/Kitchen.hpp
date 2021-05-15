@@ -33,6 +33,7 @@ class Kitchen {
         const std::size_t &getRestockTime() const;
         const std::size_t &getTotalPizze() const;
         void takeOrders();
+        void restockFridge();
 
     private:
         std::string _id;
