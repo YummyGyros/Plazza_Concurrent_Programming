@@ -130,8 +130,8 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
         _kitchens.push_back(Kitchen(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp)));
     _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
     _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
-    _logfile << "Order: pizza " << pizzaTypesToString.find(pizza.getPizzaType())->first << " size "
-    << pizzaSizesToString.find(pizza.getPizzaSize())->first << " sent to the kitchen." << std::endl;
+    _logfile << "Order: pizza " << pizzaTypesToString.find(pizza.getPizzaType())->second << " size "
+    << pizzaSizesToString.find(pizza.getPizzaSize())->second << " sent to the kitchen." << std::endl;
 }
 
 void Reception::manageNewOrder(const std::string &line)
