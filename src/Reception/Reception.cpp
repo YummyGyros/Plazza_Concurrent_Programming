@@ -17,7 +17,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
+Reception::Reception(char **av) : _shellLine(""), _msg("Reception"), _dogEnd(true)
 {
     auto start = std::chrono::high_resolution_clock::now();
     _logfile.open("logfile.txt");
@@ -34,9 +34,10 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
         if (_shellLine.compare("") != 0) {
             if (_shellLine.compare("status") == 0)
                 displayStatus();
-            else if (_shellLine.compare("exit") == 0)
+            else if (_shellLine.compare("exit") == 0) {
+                _dogEnd = false;
                 break;
-            else
+            } else
                 manageNewOrder(_shellLine);
         }
     }
@@ -44,6 +45,7 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception")
 
 Reception::~Reception()
 {
+    _thread.join();
     for (auto &order : _orders)
         order.clear();
     _orders.clear();
@@ -53,22 +55,28 @@ Reception::~Reception()
 
 void Reception::receiveCookedPizza()
 {
-    Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
-    bool orderReady;
+    while (_dogEnd) {
+        try {
+            Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+            bool orderReady;
 
-    for (auto it = std::begin(_orders); it != std::end(_orders); ++it) {
-        orderReady = true;
-        for (auto &refPizza : *it) {
-            if (!pizza.getIsCooked() && pizza == refPizza)
-                refPizza.setIsCooked(true);
-            if (!pizza.getIsCooked())
-                orderReady = false;
-        }
-        if (orderReady) {
-            displayOrder(*it);
-            (*it).clear();
-            _orders.erase(it);
-            break;
+            for (auto it = std::begin(_orders); it != std::end(_orders); ++it) {
+                orderReady = true;
+                for (auto &refPizza : *it) {
+                    if (!pizza.getIsCooked() && pizza == refPizza)
+                        refPizza.setIsCooked(true);
+                    if (!pizza.getIsCooked())
+                        orderReady = false;
+                }
+                if (orderReady) {
+                    displayOrder(*it);
+                    (*it).clear();
+                    _orders.erase(it);
+                    break;
+                }
+            }
+        } catch (CommunicationError &e) {
+
         }
     }
 }

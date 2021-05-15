@@ -14,8 +14,8 @@
 
 class Pizza {
     public:
-        Pizza(PizzaType _type, PizzaSize _size);
         Pizza();
+        Pizza(PizzaType _type, PizzaSize _size);
         Pizza(const Pizza &pizza);
         ~Pizza() = default;
         bool operator==(const Pizza &rhs) const;

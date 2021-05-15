@@ -56,8 +56,8 @@ class MessageQueue {
         {
             T pizza;
 
-            if (msgrcv(_msgid, &pizza, sizeof(T), 1, 0) == -1)
-                throw CommunicationError("msgrcv failed.");
+            if (msgrcv(_msgid, &pizza, sizeof(T), 1, IPC_NOWAIT) == -1)
+                throw CommunicationError("msgrcv: No message received.");
             return pizza;
         }
 
