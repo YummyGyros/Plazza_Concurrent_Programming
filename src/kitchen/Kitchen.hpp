@@ -34,6 +34,7 @@ class Kitchen {
         const std::size_t &getTotalPizze() const;
         void takeOrders();
         void restockFridge();
+        void receiveCookedPizza();
 
     private:
         std::string _id;
@@ -41,6 +42,7 @@ class Kitchen {
         Serializing _srl;
         int _receptionId;
         std::thread _orders;
+        bool _dogEnd;
 
         float _timeMul;
         std::size_t _nbCooks;
@@ -50,6 +52,7 @@ class Kitchen {
         bool _isAlive;
         int _lifeTime;
 
+        std::thread _receive;
         std::unordered_map<ingredients_e, std::size_t> _fridge;
         SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
 };

@@ -76,7 +76,6 @@ void Reception::receiveCookedPizza()
                 }
             }
         } catch (CommunicationError &e) {
-
         }
     }
 }
