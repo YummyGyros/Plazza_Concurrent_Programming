@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <utility>
 
 #include <sys/select.h>
 #include <sys/time.h>
@@ -98,13 +99,10 @@ void Reception::updateShell()
         _shellLine = "";
 }
 
-bool Reception::canCookPizza(const Pizza &pizza, const Kitchen &kitchen)
-{
-    return true;
-}
 
 void Reception::consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen)
 {
+<<<<<<< HEAD
     auto recipe = Recipe.find(pizza.getPizzaType());
     std::unordered_map<ingredients_e, std::size_t> fridge = kitchen.getFridge();
 
@@ -123,6 +121,30 @@ void Reception::consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen)
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
+=======
+}
+
+// bool cmp(const Kitchen &lhs, const Kitchen &rhs)
+// {
+//     return lhs.getTotalPizze() < rhs.getTotalPizze();
+// }
+
+void Reception::sendPizzaToKitchen(const Pizza &pizza)
+{
+    // FIND KITCHEN: canCookPizza() == true && lowest totalPizze of all.
+    //      -->  if none --> createKitchen
+    // UPDATE STOCKS AND TOTALPIZZE
+    // SEND PIZZA
+    // auto min = *std::min_element(_kitchens.begin(), _kitchens.end(), [](){return cmp});
+    // std::cout << "kitchen with minimum total pizze: " << min.getId() << std::endl;
+    // std::size_t min = 0;
+    // std::vector<Kitchen> tmpForMinimum;
+
+    // for (const auto &kitchen : _kitchens)
+    //     if (kitchen.canCookPizza(pizza))
+    //         tmpForMinimum.push_back(kitchen);
+    // auto min = std::min_element(tmpForMinimum.begin(), tmpForMinimum.end(), cmp);
+>>>>>>> cb8a5eaa447de2472fcc5da7f9e02fc1041b3922
 }
 
 void Reception::manageNewOrder(const std::string &line)
@@ -158,7 +180,10 @@ void Reception::displayStatus()
 {
     std::cout << "Status information should be displayed here." << std::endl;
     // iterate through _kitchens
-    // display stock and chiefs occupancy
+    // // display stock and chiefs occupancy
+    // std::vector<int> _numbers = { 3, 1, 2, 7, 4, 0, 9};
+    // auto min = *std::min_element(_numbers.begin(), _numbers.end());
+    // std::cout << "int min: " << min << std::endl;
 }
 
 int Reception::checkLastArg(std::string &tmp)
