@@ -102,49 +102,17 @@ void Reception::updateShell()
 
 void Reception::consumeIngredientsForPizza(const Pizza &pizza, Kitchen &kitchen)
 {
-<<<<<<< HEAD
-    auto recipe = Recipe.find(pizza.getPizzaType());
-    std::unordered_map<ingredients_e, std::size_t> fridge = kitchen.getFridge();
+    // auto recipe = Recipe.find(pizza.getPizzaType());
+    // std::unordered_map<ingredients_e, std::size_t> fridge = kitchen.getFridge();
 
-    for (ingredients_e ingr: recipe->second) {
-        fridge[ingr] -= 1;
-    }
-    kitchen.setFridge(fridge);
+    // for (ingredients_e ingr: recipe->second) {
+    //     fridge[ingr] -= 1;
+    // }
+    // kitchen.setFridge(fridge);
 }
-
-// static const std::unordered_map<PizzaType, std::vector<ingredients_e>> Recipe = { 
-//     {Regina, {tomato, gruyere}},
-//     {Margarita, {tomato, gruyere, ham, mushrooms}},
-//     {Americana, {tomato, gruyere, steak}},
-//     {Fantasia, {tomato, eggplant, goatCheese, chiefLove}}
-// };
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
-=======
-}
-
-// bool cmp(const Kitchen &lhs, const Kitchen &rhs)
-// {
-//     return lhs.getTotalPizze() < rhs.getTotalPizze();
-// }
-
-void Reception::sendPizzaToKitchen(const Pizza &pizza)
-{
-    // FIND KITCHEN: canCookPizza() == true && lowest totalPizze of all.
-    //      -->  if none --> createKitchen
-    // UPDATE STOCKS AND TOTALPIZZE
-    // SEND PIZZA
-    // auto min = *std::min_element(_kitchens.begin(), _kitchens.end(), [](){return cmp});
-    // std::cout << "kitchen with minimum total pizze: " << min.getId() << std::endl;
-    // std::size_t min = 0;
-    // std::vector<Kitchen> tmpForMinimum;
-
-    // for (const auto &kitchen : _kitchens)
-    //     if (kitchen.canCookPizza(pizza))
-    //         tmpForMinimum.push_back(kitchen);
-    // auto min = std::min_element(tmpForMinimum.begin(), tmpForMinimum.end(), cmp);
->>>>>>> cb8a5eaa447de2472fcc5da7f9e02fc1041b3922
 }
 
 void Reception::manageNewOrder(const std::string &line)
