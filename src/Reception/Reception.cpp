@@ -125,11 +125,13 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
             kitchensCanCook.push_back(kitchen);
 
     if (kitchensCanCook.empty())
-        _kitchens.emplace_back(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
+        _kitchens.push_back(Kitchen(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid()));
     else
-        _kitchens.emplace_back(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp));
-    _kitchens.end()->takePizzaInCharge(pizza);
-    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.end()->getMessageQueue().getMsgid());
+        _kitchens.push_back(Kitchen(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp)));
+    _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
+    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
+    _logfile << "Order: pizza " << pizzaTypesToString.find(pizza.getPizzaType())->first << " size "
+    << pizzaSizesToString.find(pizza.getPizzaSize())->first << " sent to the kitchen." << std::endl;
 }
 
 void Reception::manageNewOrder(const std::string &line)
@@ -156,8 +158,10 @@ void Reception::displayOrder(const std::vector<Pizza> &pizze)
     _logfile << "Order Ready" << std::endl;
     _logfile << "--------------------------" << std::endl;
     for (const auto &pizza : pizze) {
-        _logfile << "\tpizza:\ttype:\t" << pizza.getPizzaType() << "\t\tsize:\t" << pizza.getPizzaSize() << std::endl;
+        _logfile << "\tpizza:\ttype:\t" << pizzaTypesToString.find(pizza.getPizzaType())->first
+        << "\t\tsize:\t" << pizzaSizesToString.find(pizza.getPizzaSize())->first << std::endl;
     }
+    _logfile << "       Buon Appetito      " << std::endl;
     _logfile << "==========================" << std::endl;
 }
 
@@ -165,10 +169,15 @@ void Reception::displayStatus()
 {
     if (_kitchens.empty())
         _logfile << "No kitchen exist at this time." << std::endl;
+    else
+        _logfile << "=========Status===========" << std::endl;
     for (const auto &kitchen : _kitchens) {
-        _logfile << kitchen.getId() << std::endl;
-        _logfile << "\t pizze in charge: "<< kitchen.getTotalPizze() << std::endl;
-        _logfile << "[stocks should be displayed here]" << std::endl;
+        auto fridge = kitchen.getFridge();
+        _logfile << kitchen.getId() << ":" << std::endl;
+        _logfile << "\tpizze in charge: "<< kitchen.getTotalPizze() << std::endl;
+        for (auto ingredient : fridge)
+            _logfile << "\t" << ingredient.first << ":\t" << ingredient.second << std::endl;
+        _logfile << "==========================" << std::endl;
     }
 }
 
@@ -229,7 +238,7 @@ void Reception::addKitchen()
 
 void Reception::deleteKitchen(const std::string &id)
 {
-    // _kitchens.erase(std::remove_if(_kitchens.begin(), _kitchens.end(), [&id](Kitchen &kitchen){return (id == kitchen.getId());}));
+    // _kitchens.erase(std::remove_if(_kitchens.begin(), _kitchens.at(_kitchens.size() - 1), [&id](Kitchen &kitchen){return (id == kitchen.getId());}));
 }
 
 void Reception::restockFridges()

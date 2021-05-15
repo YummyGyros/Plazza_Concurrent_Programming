@@ -28,6 +28,21 @@ enum PizzaSize
     XXL = 16
 };
 
+const std::unordered_map<PizzaType, std::string> pizzaTypesToString = {
+    { Regina, "regina", },
+    { Margarita, "margarita" },
+    { Americana, "americana" },
+    { Fantasia, "fantasia" }
+};
+
+const std::unordered_map<PizzaSize, std::string> pizzaSizesToString = {
+    { S, "S" },
+    { M, "M" },
+    { L, "L" },
+    { XL, "XL" },
+    { XXL, "XXL" }
+};
+
 const std::unordered_map<std::string, PizzaType> pizzaTypes = {
     { "regina", Regina },
     { "margarita", Margarita },
