@@ -193,22 +193,28 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
         }
 }
 
+bool Reception::deleteKitchen(pizza_order_t pizzaMsg)
+{
+    if (pizzaMsg.destroy == true) {
+        for (auto kitchen = _kitchens.begin(); kitchen != _kitchens.end(); ++kitchen)
+            if (kitchen->get()->getMessageQueue().getMsgid() == pizzaMsg.id) {
+                _kitchens.erase(kitchen);
+                break;
+            }
+        return true;
+    }
+    return false;
+}
+
 void Reception::receiveCookedPizza()
 {
     while (_end) {
         try {
-            pizza_order_t pizzaMsg = {1, 1, Regina, S, 0};
-            pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
-            if (pizzaMsg.destroy == true) {
-                for (auto kitchen = _kitchens.begin(); kitchen != _kitchens.end(); ++kitchen)
-                    if (kitchen->get()->getMessageQueue().getMsgid() == pizzaMsg.id) {
-                        _kitchens.erase(kitchen);
-                        break;
-                    }
-                break;
-            }
+            pizza_order_t pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
             bool orderReady;
 
+            if (deleteKitchen(pizzaMsg))
+                break;
             for (auto &kitchen : _kitchens) {
                 if (kitchen->getMessageQueue().getMsgid() == pizzaMsg.id)
                     kitchen->setTotalPizze(kitchen->getTotalPizze() - 1);

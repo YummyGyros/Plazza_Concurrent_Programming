@@ -45,7 +45,7 @@ class Reception {
         // KITCHENS Functions
         std::chrono::_V2::system_clock::time_point restockClock
         (std::chrono::_V2::system_clock::time_point);
-        void deleteKitchen();
+        bool deleteKitchen(pizza_order_t);
 
         // PARSING Variables
         std::string _shellLine;
