@@ -131,7 +131,7 @@ const std::size_t &Kitchen::getTotalPizze() const
 
 void Kitchen::setTotalPizze(const std::size_t &totalPizze)
 {
-    _totalPizze = totalPizze
+    _totalPizze = totalPizze;
 }
 
 void Kitchen::restockFridge()
