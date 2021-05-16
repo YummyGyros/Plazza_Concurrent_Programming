@@ -31,7 +31,6 @@ int main(int ac, char **av)
             return 0;
         }
     if (ac != 4) {
-        std::cerr << USAGE << std::endl;
         usage(std::cerr);
         return 84;
     }
