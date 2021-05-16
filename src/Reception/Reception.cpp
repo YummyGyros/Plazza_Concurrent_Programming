@@ -174,14 +174,14 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
     if (kitchensCanCook.empty()) {
         ptrKitchen = std::make_shared<Kitchen>(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
         Processes p(*ptrKitchen);
-        _kitchens.push_back(std::move(ptrKitchen));
+        _kitchens.push_back(ptrKitchen);
     } else
         ptrKitchen = *std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmpTotalPizze);
     for (const auto &kitchen : _kitchens)
         if (kitchen->getId().compare(ptrKitchen->getId()) == 0) {
             kitchen->takePizzaInCharge(pizza);
-            _msg.sendMsg<pizza_order_t>(_srl.pack(pizza, _msg.getMsgid()), ptrKitchen->getMessageQueue().getMsgid());
-            std::cout <<"[sent]: " << pizza.getTypeStr() << " size " << pizza.getSizeStr() << " to " << kitchen->getId() << std::endl;
+            _msg.sendMsg<pizza_order_t>(_srl.pack(pizza, _msg.getMsgid()), kitchen->getMessageQueue().getMsgid());
+            std::cout <<"[sent]: " << pizza.getTypeStr() << " size " << pizza.getSizeStr() << " to Kitchen" << kitchen->getId() << std::endl;
         }
 }
 
