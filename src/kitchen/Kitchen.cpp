@@ -49,7 +49,7 @@ void Kitchen::receiveCookedPizza()
     while (_end) {
         try {
             Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
-            _queue.push(std::make_pair(pizza.getPizzaType(), pizza.getPizzaSize()));
+            _queue.push(std::make_pair(pizza.getType(), pizza.getSize()));
         } catch (CommunicationError &e) {
         }
     }
@@ -57,7 +57,7 @@ void Kitchen::receiveCookedPizza()
 
 bool Kitchen::canCookPizza(const Pizza &pizza) const
 {
-    auto recipe = recipes.find(pizza.getPizzaType());
+    auto recipe = recipes.find(pizza.getType());
 
     for (Ingredients ingr: recipe->second) {
         if (_fridge.find(ingr)->second == 0)
@@ -68,7 +68,7 @@ bool Kitchen::canCookPizza(const Pizza &pizza) const
 
 void Kitchen::takePizzaInCharge(const Pizza &pizza)
 {
-    for (Ingredients ingr: recipes.find(pizza.getPizzaType())->second)
+    for (Ingredients ingr: recipes.find(pizza.getType())->second)
         _fridge[ingr] -= 1;
     _totalPizze++;
 }

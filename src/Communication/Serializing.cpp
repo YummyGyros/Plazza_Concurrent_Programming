@@ -9,11 +9,7 @@
 
 Pizza Serializing::unpack(pizza_order_t pizza)
 {
-    Pizza newPizza;
-
-    newPizza.setPizzaType(pizza.type);
-    newPizza.setPizzaSize(pizza.size);
-    return newPizza;
+    return Pizza(pizza.type, pizza.size);
 }
 
 std::unordered_map<Ingredients, std::size_t> Serializing::unpack(status_t stock)
@@ -34,7 +30,7 @@ std::unordered_map<Ingredients, std::size_t> Serializing::unpack(status_t stock)
 
 pizza_order_t Serializing::pack(Pizza pizza)
 {
-    return {1, pizza.getPizzaType(), pizza.getPizzaSize()};
+    return {1, pizza.getType(), pizza.getSize()};
 }
 
 status_t Serializing::pack(std::unordered_map<Ingredients, std::size_t> stock)

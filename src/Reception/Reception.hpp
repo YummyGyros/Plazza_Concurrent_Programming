@@ -46,15 +46,13 @@ class Reception {
         // PARSING Variables
         std::string _shellLine;
 
-        // ARGS Variables
-        float _timeMultiplier;
-        std::size_t _cooksPerKitchen;
-        std::size_t _restockTime;
-
         // KITCHENS Variables
         std::vector<Kitchen> _kitchens;
         std::vector<std::vector<Pizza>> _orders;
         std::size_t _kitchensId;
+        float _timeMultiplier;
+        std::size_t _cooksPerKitchen;
+        std::size_t _restockTime;
 
         // IPC Variables
         MessageQueue _msg;

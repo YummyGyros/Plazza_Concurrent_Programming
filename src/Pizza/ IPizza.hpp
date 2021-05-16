@@ -14,13 +14,14 @@ class IPizza {
     public:
         virtual ~IPizza() = default;
 
-        virtual void setPizzaType(const PizzaType type) = 0;
-        virtual void setPizzaSize(const PizzaSize size) = 0;
-        virtual void setIsCooked(const bool isCooked) = 0;
+        virtual PizzaType getType() const = 0;
+        virtual PizzaSize getSize() const = 0;
+        virtual const std::string &getTypeStr() const = 0;
+        virtual const std::string &getSizeStr() const = 0;
+        virtual const std::vector<Ingredients> &getRecipe() const = 0;
 
-        virtual PizzaType getPizzaType() const = 0;
-        virtual PizzaSize getPizzaSize() const = 0;
         virtual bool getIsCooked() const = 0;
+        virtual void setIsCooked(const bool isCooked) = 0;
 };
 
 #endif /* !_IPIZZA_HPP_ */

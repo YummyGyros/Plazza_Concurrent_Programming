@@ -15,23 +15,29 @@
 
 class Pizza : public IPizza {
     public:
-        Pizza();
         ~Pizza() override;
-        Pizza(PizzaType _type, PizzaSize _size);
-        Pizza(const Pizza &pizza);
+        Pizza(PizzaType _type, PizzaSize _size) noexcept;
+        Pizza(const std::string &type, const std::string &size);
+        Pizza(const Pizza &pizza) noexcept;
         bool operator==(const Pizza &rhs) const;
 
-        void setPizzaType(const PizzaType type) override;
-        void setPizzaSize(const PizzaSize size) override;
-        void setIsCooked(const bool isCooked) override;
+        PizzaType getType() const override;
+        PizzaSize getSize() const override;
+        const std::string &getTypeStr() const override;
+        const std::string &getSizeStr() const override;
+        const std::vector<Ingredients> &getRecipe() const override;
 
-        PizzaType getPizzaType() const override;
-        PizzaSize getPizzaSize() const override;
         bool getIsCooked() const override;
+        void setIsCooked(const bool isCooked) override;
     protected:
     private:
+        std::string _typeStr;
         PizzaType _type;
+
+        std::string _sizeStr;
         PizzaSize _size;
+
+        std::vector<Ingredients> _recipe;
         bool _isCooked;
 };
 

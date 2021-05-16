@@ -19,10 +19,10 @@
 
 Reception::Reception(char **av, const std::string &pathLogfile)
     : _shellLine(""),
+    _kitchensId(0),
     _timeMultiplier(std::stof(av[1])),
     _cooksPerKitchen(std::stoi(av[2])),
     _restockTime(std::stoi(av[3])),
-    _kitchensId(0),
     _msg("Reception"),
     _thread(std::thread(&Reception::receiveCookedPizza, this)),
     _pathLogfile(pathLogfile),
@@ -63,8 +63,8 @@ void Reception::displayOrder(const std::vector<Pizza> &pizze)
     std::cout <<"Order Ready" << std::endl;
     std::cout <<"--------------------------" << std::endl;
     for (const auto &pizza : pizze) {
-        std::cout <<"\tpizza:\ttype:\t" << pizzaTypesToString.find(pizza.getPizzaType())->first
-        << "\t\tsize:\t" << pizzaSizesToString.find(pizza.getPizzaSize())->first << std::endl;
+        std::cout <<"\tpizza:\ttype:\t" << pizzaTypesToString.find(pizza.getType())->first
+        << "\t\tsize:\t" << pizzaSizesToString.find(pizza.getSize())->first << std::endl;
     }
     std::cout <<"       Buon Appetito      " << std::endl;
     std::cout <<"==========================" << std::endl;
@@ -135,30 +135,53 @@ void Reception::manageNewOrder(const std::string &line)
     }
 }
 
+// std::vector<Pizza> Reception::parsePizza(const std::string &segment)
+// {
+//     std::string tmp;
+//     std::stringstream stream(segment);
+//     Pizza pizza;
+//     std::vector<Pizza> pizze;
+//     int quantity;
+
+//     stream >> tmp;
+//     if (pizzaTypes.find(tmp) == pizzaTypes.end())
+//         throw PizzaError("size", tmp);
+//     pizza.setPizzaType(pizzaTypes.find(tmp)->second);
+
+//     stream >> tmp;
+//     if (pizzaSizes.find(tmp) == pizzaSizes.end())
+//         throw PizzaError("type", tmp);
+//     pizza.setPizzaSize(pizzaSizes.find(tmp)->second);
+
+//     stream >> tmp;
+//     if ((quantity = checkLastArg(tmp)) == -1)
+//         throw PizzaError("quantity", tmp);
+
+//     for (int i = 0; i < quantity; i++) {
+//         Pizza tmp(pizza);
+//         pizze.push_back(tmp);
+//     }
+//     return pizze;
+// }
+
 std::vector<Pizza> Reception::parsePizza(const std::string &segment)
 {
-    std::string tmp;
     std::stringstream stream(segment);
-    Pizza pizza;
+    std::string tmp;
+    std::string size;
+    std::string type;
     std::vector<Pizza> pizze;
     int quantity;
 
+    stream >> type;
+    stream >> size;
     stream >> tmp;
-    if (pizzaTypes.find(tmp) == pizzaTypes.end())
-        throw PizzaError("size", tmp);
-    pizza.setPizzaType(pizzaTypes.find(tmp)->second);
-
-    stream >> tmp;
-    if (pizzaSizes.find(tmp) == pizzaSizes.end())
-        throw PizzaError("type", tmp);
-    pizza.setPizzaSize(pizzaSizes.find(tmp)->second);
-
-    stream >> tmp;
-    if ((quantity = checkLastArg(tmp)) == -1)
+    quantity = checkLastArg(tmp);
+    if (quantity == -1)
         throw PizzaError("quantity", tmp);
 
     for (int i = 0; i < quantity; i++) {
-        Pizza tmp(pizza);
+        Pizza tmp(type, size);
         pizze.push_back(tmp);
     }
     return pizze;
@@ -189,8 +212,8 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
     }
     _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
     _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
-    std::cout <<"Order: pizza " << pizzaTypesToString.find(pizza.getPizzaType())->second << " size "
-    << pizzaSizesToString.find(pizza.getPizzaSize())->second << " sent to the kitchen." << std::endl;
+    std::cout <<"Order: pizza " << pizzaTypesToString.find(pizza.getType())->second << " size "
+    << pizzaSizesToString.find(pizza.getSize())->second << " sent to the kitchen." << std::endl;
 }
 
 void Reception::receiveCookedPizza()
