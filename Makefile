@@ -67,7 +67,7 @@ TESTS_OBJ	=	$(TESTS:.cpp=.o)
 
 ## FLAGS ##############################
 
-CFLAGS	=
+CFLAGS	= -W -Wall -Wextra
 
 DBGFLAGS	=	-k8 -g3 -ggdb
 

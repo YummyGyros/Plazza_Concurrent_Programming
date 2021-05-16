@@ -21,7 +21,6 @@ Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, st
         {chiefLove, 5}
     })
 {
-    std::cout << "newKitch" << std::endl;
 }
 
 Kitchen::~Kitchen()
@@ -33,7 +32,6 @@ void Kitchen::receiveCookedPizza()
     while (_end) {
         try {
             pizza_order_t pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
-            std::cout << "get message" << std::endl;
             _queue.push(std::make_pair(pizzaMsg.type, pizzaMsg.size));
         } catch (CommunicationError &e) {
         }
@@ -128,4 +126,9 @@ void Kitchen::restockFridge()
 const std::unordered_map<Ingredients, std::size_t> &Kitchen::getFridge() const
 {
     return _fridge;
+}
+
+std::size_t Kitchen::calcActiveCooks() const
+{
+    return _totalPizze > _nbCooks ? _totalPizze - _nbCooks : _totalPizze;
 }

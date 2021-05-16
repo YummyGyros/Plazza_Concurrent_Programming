@@ -76,8 +76,6 @@ void Reception::displayOrder(const std::vector<std::shared_ptr<Pizza>> &pizze)
 
 void Reception::displayStatus()
 {
-    std::size_t cooks = 0;
-
     if (_kitchens.empty())
         displayString("No kitchen exist at this time.");
     else
@@ -85,14 +83,8 @@ void Reception::displayStatus()
     for (const auto &kitchen : _kitchens) {
         auto fridge = kitchen->getFridge();
         displayString("kitchen " + kitchen->getId() + ":");
-        displayString("\tpizze in charge: " + kitchen->getTotalPizze());
-        // cooks << [](const std::shared_ptr<Kitchen> &kitchen){
-        //     if (kitchen->getTotalPizze() > kitchen->getNbCooks())
-        //         return kitchen->getTotalPizze() - kitchen->getNbCooks();
-        //     else
-        //         return kitchen->getTotalPizze();
-        // }
-        // displayString ("active cooks: " + cooks);
+        displayString("\tpizze in charge: " + kitchen->calcActiveCooks());
+        displayString ("active cooks: " + std::to_string(kitchen->calcActiveCooks()));
         for (auto ingredient : fridge)
             displayString("\t" + ingredientsToString.find(ingredient.first)->second + ":" + std::to_string(ingredient.second));
         displayString("==========================");
@@ -196,7 +188,7 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
         if (kitchen->getId().compare(ptrKitchen->getId()) == 0) {
             kitchen->takePizzaInCharge(pizza);
             _msg.sendMsg<pizza_order_t>(_srl.pack(pizza, _msg.getMsgid()), kitchen->getMessageQueue().getMsgid());
-            displayString("[sent]: " + pizza.getTypeStr() + "size" + pizza.getSizeStr() + " to Kitchen" + kitchen->getId());
+            displayString("[sent]: " + pizza.getTypeStr() + " size " + pizza.getSizeStr() + " to Kitchen" + kitchen->getId());
         }
 }
 

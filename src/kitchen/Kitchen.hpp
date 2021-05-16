@@ -39,6 +39,8 @@ class Kitchen {
         void receiveCookedPizza();
         const std::unordered_map<Ingredients, std::size_t> &getFridge() const;
 
+        std::size_t calcActiveCooks() const;
+
     private:
         std::string _id;
         MessageQueue _msg;
