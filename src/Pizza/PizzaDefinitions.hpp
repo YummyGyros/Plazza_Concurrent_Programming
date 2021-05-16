@@ -41,6 +41,17 @@ enum Ingredients
     chiefLove
 };
 
+const std::unordered_map<Ingredients, std::string> ingredientsToString = {
+    { tomato, "tomato", },
+    { gruyere, "gruyere" },
+    { ham, "ham" },
+    { mushrooms, "mushrooms" },
+    { steak, "steak" },
+    { eggplant, "eggplant" },
+    { goatCheese, "goatCheese" },
+    { chiefLove, "chiefLove" }
+};
+
 static const std::unordered_map<PizzaType, std::vector<Ingredients>> recipes = {
     {Regina, {tomato, gruyere}},
     {Margarita, {tomato, gruyere, ham, mushrooms}},

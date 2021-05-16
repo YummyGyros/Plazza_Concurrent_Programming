@@ -27,6 +27,7 @@ class Reception {
         ~Reception();
     private:
         // DISPLAY Functions
+        void displayString(const std::string &str);
         void displayOrder(const std::vector<std::shared_ptr<Pizza>> &pizze);
         void displayStatus();
 

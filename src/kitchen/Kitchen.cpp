@@ -38,6 +38,7 @@ Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, st
         {chiefLove, 5}
     })
 {
+    std::cout << "newKitch" << std::endl;
 }
 
 Kitchen::~Kitchen()
