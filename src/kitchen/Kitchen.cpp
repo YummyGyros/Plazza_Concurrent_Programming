@@ -25,6 +25,8 @@ Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, st
 
 Kitchen::~Kitchen()
 {
+    // if (_receive.joinable())
+    //     _receive.join();
 }
 
 void Kitchen::receiveCookedPizza()

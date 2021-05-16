@@ -7,7 +7,7 @@
 
 ## USEFUL DEF ########################
 
-CC			=	g++
+CXX			=	g++
 RM			=	-rm -f
 BIN			=	plazza
 TEST_BIN	=	unit_tests
@@ -66,11 +66,11 @@ TESTS_OBJ	=	$(TESTS:.cpp=.o)
 
 ## FLAGS ##############################
 
-CFLAGS	= -W -Wall -Wextra
+CXXFLAGS	= -W -Wall -Wextra -Wl,--stack,10485760
 
 DBGFLAGS	=	-k8 -g3 -ggdb
 
-LDFLAGS		= -lpthread
+PTHREAD		=	-lpthread
 
 INCLUDE		=	-iquote ./src/Reception/ -iquote ./src/Pizza/ -iquote ./src/Error/ -iquote ./src/Communication/ -iquote ./src/kitchen/ -iquote ./src/kitchen/Thread/
 
@@ -81,7 +81,7 @@ INCLUDE		=	-iquote ./src/Reception/ -iquote ./src/Pizza/ -iquote ./src/Error/ -i
 all : $(BIN)
 
 $(BIN): $(MAIN_OBJ) $(SRC_OBJ)
-	$(CC) -o $(BIN) $(MAIN_OBJ) $(SRC_OBJ) $(CFLAGS) $(LDFLAGS)
+	$(CXX) -o $(BIN) $(MAIN_OBJ) $(SRC_OBJ) $(PTHREAD)
 
 ## Clear
 clean:
@@ -99,14 +99,14 @@ fclean: clean
 
 ## GCOVR NEEDS:
 %.o:    %.cpp
-	$(CC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
+	$(CXX) $(INCLUDE) -c -o $@ $<
 
 re: fclean clean all
 
-tests_run:  CFLAGS += --coverage
+tests_run:  CXXFLAGS += --coverage
 tests_run:  LDFLAGS += -lcriterion -DUNIT_TEST
 tests_run:	$(TESTS_OBJ) $(SRC_OBJ)
-	$(CC) -o $(TEST_BIN) $(TESTS_OBJ) $(SRC_OBJ) $(CFLAGS) $(LDFLAGS) $(INCLUDE)
+	$(CXX) -o $(TEST_BIN) $(TESTS_OBJ) $(SRC_OBJ) $(LDFLAGS) $(INCLUDE)
 	-./$(TEST_BIN)
 	gcovr -b --exclude-directories tests
 	gcovr -r . --exclude-directories tests
