@@ -18,7 +18,6 @@ class Pizza : public IPizza {
         ~Pizza() override;
         Pizza(PizzaType _type, PizzaSize _size) noexcept;
         Pizza(const std::string &type, const std::string &size);
-        Pizza(const Pizza &pizza) noexcept;
         bool operator==(const Pizza &rhs) const;
 
         PizzaType getType() const override;

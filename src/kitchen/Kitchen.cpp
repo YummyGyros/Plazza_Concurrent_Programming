@@ -57,9 +57,7 @@ void Kitchen::receiveCookedPizza()
 
 bool Kitchen::canCookPizza(const Pizza &pizza) const
 {
-    auto recipe = recipes.find(pizza.getType());
-
-    for (Ingredients ingr: recipe->second) {
+    for (Ingredients ingr: pizza.getRecipe()) {
         if (_fridge.find(ingr)->second == 0)
             return false;
     }
@@ -68,7 +66,7 @@ bool Kitchen::canCookPizza(const Pizza &pizza) const
 
 void Kitchen::takePizzaInCharge(const Pizza &pizza)
 {
-    for (Ingredients ingr: recipes.find(pizza.getType())->second)
+    for (Ingredients ingr: pizza.getRecipe())
         _fridge[ingr] -= 1;
     _totalPizze++;
 }

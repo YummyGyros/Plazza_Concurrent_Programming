@@ -35,11 +35,6 @@ Pizza::Pizza(const std::string &type, const std::string &size)
     _size = pizzaSizes.find(size)->second;
 }
 
-Pizza::Pizza(const Pizza &pizza) noexcept
-    : _type(pizza._type), _size(pizza._size), _isCooked(pizza._isCooked)
-{
-}
-
 bool Pizza::operator==(const Pizza &rhs) const
 {
     return _type == rhs._type && _size == rhs._size;

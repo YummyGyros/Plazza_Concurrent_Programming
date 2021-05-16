@@ -27,14 +27,14 @@ class Reception {
         ~Reception();
     private:
         // DISPLAY Functions
-        void displayOrder(const std::vector<Pizza> &pizze);
+        void displayOrder(const std::vector<std::shared_ptr<Pizza>> &pizze);
         void displayStatus();
 
         // PARSING Functions
         int checkLastArg(std::string &tmp);
         void updateShell();
         void manageNewOrder(const std::string &line);
-        std::vector<Pizza> parsePizza(const std::string &segment);
+        std::vector<std::shared_ptr<Pizza>> parsePizza(const std::string &segment);
 
         // IPC Functions
         void sendPizzaToKitchen(const Pizza &pizza);
@@ -49,7 +49,7 @@ class Reception {
 
         // KITCHENS Variables
         std::vector<std::shared_ptr<Kitchen>> _kitchens;
-        std::vector<std::vector<Pizza>> _orders;
+        std::vector<std::vector<std::shared_ptr<Pizza>>> _orders;
         std::size_t _kitchensId;
         float _timeMultiplier;
         std::size_t _cooksPerKitchen;
