@@ -57,13 +57,13 @@ Reception::~Reception()
     _logfile.close();
 }
 
-void Reception::displayOrder(const std::vector<Pizza> &pizze)
+void Reception::displayOrder(const std::vector<std::shared_ptr<Pizza>> &pizze)
 {
     std::cout <<"==========================" << std::endl;
     std::cout <<"Order Ready" << std::endl;
     std::cout <<"--------------------------" << std::endl;
     for (const auto &pizza : pizze)
-        std::cout <<"\tpizza:\ttype:\t" << pizza.getType() << "\t\tsize:\t" << pizza.getSize() << std::endl;
+        std::cout <<"\tpizza:\ttype:\t" << pizza->getTypeStr() << "\t\tsize:\t" << pizza->getSizeStr() << std::endl;
     std::cout <<"       Buon Appetito      " << std::endl;
     std::cout <<"==========================" << std::endl;
 }
@@ -120,26 +120,26 @@ void Reception::manageNewOrder(const std::string &line)
     try {
         std::stringstream stream(line);
         std::string segment;
-        std::vector<Pizza> pizze;
+        std::vector<std::shared_ptr<Pizza>> pizze;
 
         while (std::getline(stream, segment, ';'))
             for (const auto &pizza: parsePizza(segment))
                 pizze.push_back(pizza);
         for (const auto &pizza : pizze)
-            sendPizzaToKitchen(pizza);
+            sendPizzaToKitchen(*pizza);
         _orders.push_back(pizze);
     } catch (Error &e) {
         std::cerr << e.what() << std::endl;
     }
 }
 
-std::vector<Pizza> Reception::parsePizza(const std::string &segment)
+std::vector<std::shared_ptr<Pizza>> Reception::parsePizza(const std::string &segment)
 {
     std::stringstream stream(segment);
     std::string tmp;
     std::string size;
     std::string type;
-    std::vector<Pizza> pizze;
+    std::vector<std::shared_ptr<Pizza>> pizze;
     int quantity;
 
     stream >> type;
@@ -149,10 +149,8 @@ std::vector<Pizza> Reception::parsePizza(const std::string &segment)
     if (quantity == -1)
         throw PizzaError("quantity", tmp);
 
-    for (int i = 0; i < quantity; i++) {
-        Pizza tmp(type, size);
-        pizze.push_back(tmp);
-    }
+    for (int i = 0; i < quantity; i++)
+        pizze.emplace_back(std::make_unique<Pizza>(type, size));
     return pizze;
 }
 
@@ -181,7 +179,7 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
     }
     _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
     _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
-    std::cout <<"Order: " << pizza.getType() << " size " << pizza.getSize() << " sent to the kitchen." << std::endl;
+    std::cout <<"Order: " << pizza.getTypeStr() << " size " << pizza.getSizeStr() << " sent to the kitchen." << std::endl;
 }
 
 void Reception::receiveCookedPizza()
@@ -194,8 +192,8 @@ void Reception::receiveCookedPizza()
             for (auto it = std::begin(_orders); it != std::end(_orders); ++it) {
                 orderReady = true;
                 for (auto &refPizza : *it) {
-                    if (!pizza.getIsCooked() && pizza == refPizza)
-                        refPizza.setIsCooked(true);
+                    if (!pizza.getIsCooked() && pizza == *refPizza)
+                        refPizza->setIsCooked(true);
                     if (!pizza.getIsCooked())
                         orderReady = false;
                 }
