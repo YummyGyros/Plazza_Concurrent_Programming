@@ -42,6 +42,8 @@ void Kitchen::receiveCookedPizza()
 
 bool Kitchen::canCookPizza(const Pizza &pizza) const
 {
+    if (_totalPizze >= _nbCooks)
+        return false;
     for (Ingredients ingr: pizza.getRecipe()) {
         if (_fridge.find(ingr)->second == 0)
             return false;
