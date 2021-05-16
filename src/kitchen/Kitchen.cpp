@@ -20,6 +20,7 @@ Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, st
         {chiefLove, 5}
     })
 {
+    SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
 }
 
 Kitchen::~Kitchen()
@@ -63,7 +64,6 @@ bool Kitchen::checkIsAlive()
 void Kitchen::startWork()
 {
 
-    SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
     ThreadPool threads(_timeMul, _nbCooks, _queue, _msg, _receptionId);
     _receive = std::thread(&Kitchen::receiveCookedPizza, this);
 

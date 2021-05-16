@@ -12,10 +12,14 @@
 #include <chrono>
 #include <condition_variable>
 
+#include <iostream>
+
 template <class T>
 class SafeQueue {
     public:
-        SafeQueue() = default;
+        SafeQueue() {
+            std::cout << "creator\n";
+        }
         ~SafeQueue() = default;
 
         void push(T value)
