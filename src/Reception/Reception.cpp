@@ -175,7 +175,6 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
     std::vector<std::shared_ptr<Kitchen>> kitchensCanCook;
     std::shared_ptr<Kitchen> ptrKitchen;
-    std::cout << _kitchens.size() << std::endl;
 
     for (const auto &kitchen : _kitchens)
         if (kitchen->canCookPizza(pizza))

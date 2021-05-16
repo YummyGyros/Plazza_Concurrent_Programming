@@ -18,13 +18,6 @@
 #include "MessageQueue.hpp"
 #include "PizzaDefinitions.hpp"
 
-static const std::unordered_map<PizzaType, float> timeToCook = {
-    {Margarita, {1000}},
-    {Regina, {2000}},
-    {Americana, {2000}},
-    {Fantasia, {4000}}
-};
-
 class ThreadPool {
     public:
         ThreadPool(float, std::size_t, SafeQueue<std::pair<PizzaType, PizzaSize>> &, MessageQueue &, int);
