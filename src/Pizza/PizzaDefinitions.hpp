@@ -89,4 +89,11 @@ const std::unordered_map<std::string, PizzaSize> pizzaSizes = {
     { "XXL", XXL}
 };
 
+static const std::unordered_map<PizzaType, float> timeToCook = {
+    {Margarita, {1000}},
+    {Regina, {2000}},
+    {Americana, {2000}},
+    {Fantasia, {4000}}
+};
+
 #endif /* !PIZZADEFINITIONS_HPP_ */

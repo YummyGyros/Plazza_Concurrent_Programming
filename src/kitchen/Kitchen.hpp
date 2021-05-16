@@ -21,30 +21,36 @@ class Kitchen {
         Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime, int recpetionId);
         ~Kitchen();
 
-        void startWork();
-        bool checkIsAlive();
-
-        bool canCookPizza(const Pizza &pizza) const;
-        void takePizzaInCharge(const Pizza &pizza);
-
+        // GETTERS functions
         const MessageQueue &getMessageQueue() const;
         const std::string &getId() const;
         float getTimeMul() const;
         const std::size_t &getNbCooks() const;
         const std::size_t &getRestockTime() const;
         const std::size_t &getTotalPizze() const;
-        void setTotalPizze(const std::size_t &totalPizze);
-
-        void restockFridge();
-        void receiveCookedPizza();
-        void startClock();
         const std::chrono::_V2::system_clock::time_point &getClock() const;
-
         const std::unordered_map<Ingredients, std::size_t> &getFridge() const;
 
         std::size_t calcActiveCooks() const;
 
+        // SETTERS
+        void setTotalPizze(const std::size_t &totalPizze);
+        void restockFridge();
+        void receiveCookedPizza();
+        void takePizzaInCharge(const Pizza &pizza);
+
+        // CHECK
+        bool checkIsAlive();
+        bool canCookPizza(const Pizza &pizza) const;
+
+        // PROCESSES function
+        void startWork();
+
     private:
+
+        // CLOCK
+        void startClock();
+
         std::string _id;
         MessageQueue _msg;
         Serializing _srl;

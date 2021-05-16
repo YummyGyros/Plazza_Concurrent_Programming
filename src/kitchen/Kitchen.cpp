@@ -77,7 +77,6 @@ void Kitchen::startWork()
         if (std::chrono::duration_cast<std::chrono::milliseconds>(time - _clock).count() > 5000 + 4000 * _timeMul)
             _isAlive = false;
     }
-    std::cout << "goodbye" << std::endl;
     _msg.sendMsg(destroy_order, _receptionId);
     std::exit(0);
 }
