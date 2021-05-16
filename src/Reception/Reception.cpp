@@ -182,7 +182,6 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
             kitchensCanCook.emplace_back(kitchen);
 
     if (kitchensCanCook.empty()) {
-        std::cout << "empty" << std::endl;
         ptrKitchen = std::make_shared<Kitchen>(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
         Processes p(*ptrKitchen);
         _kitchens.push_back(ptrKitchen);

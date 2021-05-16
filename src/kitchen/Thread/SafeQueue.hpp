@@ -17,9 +17,7 @@
 template <class T>
 class SafeQueue {
     public:
-        SafeQueue() {
-            std::cout << "creator\n";
-        }
+        SafeQueue() = default;
         ~SafeQueue() = default;
 
         void push(T value)

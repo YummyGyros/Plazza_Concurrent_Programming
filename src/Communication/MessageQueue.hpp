@@ -25,6 +25,7 @@ typedef struct pizza_order_s {
     int id;
     PizzaType type;
     PizzaSize size;
+    bool destroy;
 } pizza_order_t;
 
 typedef struct status_s {

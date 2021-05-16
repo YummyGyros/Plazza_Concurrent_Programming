@@ -21,7 +21,6 @@ Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, st
     })
 {
     SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
-    std::cout << "NewKitch" << std::endl;
 }
 
 Kitchen::~Kitchen()
@@ -73,11 +72,11 @@ void Kitchen::startWork()
     _receive = std::thread(&Kitchen::receiveCookedPizza, this);
 
     while (_isAlive) {
-        if (!_queue.getQueue().empty())
-            _clock = std::chrono::high_resolution_clock::now();
-        auto time = std::chrono::high_resolution_clock::now();
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(time - _clock).count() > 5000)
-            _isAlive = false;
+        // if (!_queue.getQueue().empty())
+        //     _clock = std::chrono::high_resolution_clock::now();
+        // auto time = std::chrono::high_resolution_clock::now();
+        // if (std::chrono::duration_cast<std::chrono::milliseconds>(time - _clock).count() > 5000)
+        //     _isAlive = false;
     }
     std::cout << "goodbye" << std::endl;
     _msg.sendMsg(destroy_order, _receptionId);
