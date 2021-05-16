@@ -77,12 +77,13 @@ void Reception::displayString(const std::string &str)
 
 void Reception::displayOrder(const std::vector<std::shared_ptr<Pizza>> &pizze)
 {
-    displayString("==========================");
-    displayString("Order Ready");
+    displayString("=======Buon Appetito======\n");
+    displayString("  Your order is ready.");
     displayString("--------------------------");
+    displayString("");
     for (const auto &pizza : pizze)
-        displayString("\tpizza:\ttype:\t" + pizza->getTypeStr() + "\t\tsize:\t" + pizza->getSizeStr());
-    displayString("       Buon Appetito      ");
+        displayString("- " + pizza->getTypeStr() + "\tsize:  " + pizza->getSizeStr());
+    displayString("");
     displayString("==========================");
 }
 
