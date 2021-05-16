@@ -228,7 +228,7 @@ std::chrono::_V2::system_clock::time_point Reception::restockClock(std::chrono::
     const auto temp = std::chrono::high_resolution_clock::now();
     auto timer = std::chrono::duration_cast<std::chrono::milliseconds>(temp - start);
 
-    if (timer.count() >= _restockTime) {
+    if (timer.count() >= (int64_t)_restockTime) {
         for (auto &kitchen : _kitchens)
             kitchen->restockFridge();
         start = std::chrono::high_resolution_clock::now();

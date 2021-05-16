@@ -22,7 +22,7 @@ class Kitchen {
         ~Kitchen();
 
         void startWork();
-        void checkIsAlive(ThreadPool &);
+        void checkIsAlive();
 
         bool canCookPizza(const Pizza &pizza) const;
         void takePizzaInCharge(const Pizza &pizza);

@@ -8,8 +8,7 @@
 #include "Kitchen.hpp"
 
 Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime, int receptionId)
-    : _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true), _lifeTime(5), _end(true),
-    _msg("Kitchen" + name), _id(name), _receptionId(receptionId),
+    : _id(name), _msg("Kitchen" + name),  _receptionId(receptionId),  _end(true), _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true), _lifeTime(5),
     _fridge({
         {tomato, 5},
         {gruyere, 5},
@@ -56,7 +55,7 @@ void Kitchen::takePizzaInCharge(const Pizza &pizza)
     _totalPizze++;
 }
 
-void Kitchen::checkIsAlive(ThreadPool &threads)
+void Kitchen::checkIsAlive()
 {
     static auto start = std::chrono::steady_clock::now();
     auto end = std::chrono::steady_clock::now();
