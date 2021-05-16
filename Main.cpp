@@ -36,7 +36,7 @@ int main(int ac, char **av)
         return 84;
     }
     try {
-        Reception recep(av);
+        Reception recep(av, "logfile.txt");
     } catch (Error &e) {
         std::cerr << e.what() << std::endl;
         return 84;

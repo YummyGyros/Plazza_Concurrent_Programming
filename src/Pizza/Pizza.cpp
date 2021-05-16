@@ -7,11 +7,15 @@
 
 #include "Pizza.hpp"
 
-Pizza::Pizza(PizzaType type, PizzaSize size) :_type(type), _size(size)
+Pizza::Pizza()
 {
 }
 
-Pizza::Pizza()
+Pizza::~Pizza()
+{
+}
+
+Pizza::Pizza(PizzaType type, PizzaSize size) :_type(type), _size(size)
 {
 }
 

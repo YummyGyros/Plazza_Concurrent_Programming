@@ -10,35 +10,16 @@
 
 #include "MessageQueue.hpp"
 
-enum ingredients_e
-{
-    tomato,
-    gruyere,
-    ham,
-    mushrooms,
-    steak,
-    eggplant,
-    goatCheese,
-    chiefLove
-};
-
-static const std::unordered_map<PizzaType, std::vector<ingredients_e>> Recipes = {
-    {Regina, {tomato, gruyere}},
-    {Margarita, {tomato, gruyere, ham, mushrooms}},
-    {Americana, {tomato, gruyere, steak}},
-    {Fantasia, {tomato, eggplant, goatCheese, chiefLove}}
-};
-
 class Serializing {
     public:
         Serializing();
         ~Serializing();
 
         pizza_order_t pack(Pizza pizza);
-        status_t pack(std::unordered_map<ingredients_e, std::size_t> stock);
+        status_t pack(std::unordered_map<Ingredients, std::size_t> stock);
 
         Pizza unpack(pizza_order_t pizza);
-        std::unordered_map<ingredients_e, std::size_t> unpack(status_t stock);
+        std::unordered_map<Ingredients, std::size_t> unpack(status_t stock);
 
     protected:
     private:

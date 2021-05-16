@@ -16,9 +16,9 @@ Pizza Serializing::unpack(pizza_order_t pizza)
     return newPizza;
 }
 
-std::unordered_map<ingredients_e, std::size_t> Serializing::unpack(status_t stock)
+std::unordered_map<Ingredients, std::size_t> Serializing::unpack(status_t stock)
 {
-    std::unordered_map<ingredients_e, std::size_t> fridge {
+    std::unordered_map<Ingredients, std::size_t> fridge {
         {tomato, stock.tomato},
         {gruyere, stock.gruyere},
         {ham, stock.ham},
@@ -37,7 +37,7 @@ pizza_order_t Serializing::pack(Pizza pizza)
     return {1, pizza.getPizzaType(), pizza.getPizzaSize()};
 }
 
-status_t Serializing::pack(std::unordered_map<ingredients_e, std::size_t> stock)
+status_t Serializing::pack(std::unordered_map<Ingredients, std::size_t> stock)
 {
     return {1, stock[tomato], stock[gruyere], stock[ham], stock[mushrooms],
     stock[steak], stock[eggplant], stock[goatCheese], stock[chiefLove], 1};

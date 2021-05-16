@@ -17,16 +17,20 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-Reception::Reception(char **av) : _shellLine(""), _msg("Reception"), _dogEnd(true)
+Reception::Reception(char **av, const std::string &pathLogfile)
+    : _shellLine(""),
+    _timeMultiplier(std::stof(av[1])),
+    _cooksPerKitchen(std::stoi(av[2])),
+    _restockTime(std::stoi(av[3])),
+    _kitchensId(0),
+    _msg("Reception"),
+    _thread(std::thread(&Reception::receiveCookedPizza, this)),
+    _pathLogfile(pathLogfile),
+    _end(true)
 {
     auto start = std::chrono::high_resolution_clock::now();
-    _logfile.open("logfile.txt");
+    _logfile.open(_pathLogfile);
     std::cout <<"############## Welcome to the Pizzeria Piazza ##############" << std::endl;
-    _timeMultiplier = std::stof(av[1]);
-    _cooksPerKitchen = std::stoi(av[2]);
-    _restockTime = std::stoi(av[3]);
-    _kitchensId = 0;
-    _thread = std::thread(&Reception::receiveCookedPizza, this);
 
     while (1) {
         start = restockClock(start);
@@ -35,7 +39,7 @@ Reception::Reception(char **av) : _shellLine(""), _msg("Reception"), _dogEnd(tru
             if (_shellLine.compare("status") == 0)
                 displayStatus();
             else if (_shellLine.compare("exit") == 0) {
-                _dogEnd = false;
+                _end = false;
                 break;
             } else
                 manageNewOrder(_shellLine);
@@ -51,111 +55,6 @@ Reception::~Reception()
     _orders.clear();
     _kitchens.clear();
     _logfile.close();
-}
-
-void Reception::receiveCookedPizza()
-{
-    while (_dogEnd) {
-        try {
-            Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
-            bool orderReady;
-
-            for (auto it = std::begin(_orders); it != std::end(_orders); ++it) {
-                orderReady = true;
-                for (auto &refPizza : *it) {
-                    if (!pizza.getIsCooked() && pizza == refPizza)
-                        refPizza.setIsCooked(true);
-                    if (!pizza.getIsCooked())
-                        orderReady = false;
-                }
-                if (orderReady) {
-                    displayOrder(*it);
-                    (*it).clear();
-                    _orders.erase(it);
-                    break;
-                }
-            }
-        } catch (CommunicationError &e) {
-        }
-    }
-}
-
-float Reception::getTimeMultiplier() const
-{
-    return _timeMultiplier;
-}
-
-std::size_t Reception::getCooksPerKitchen() const
-{
-    return _cooksPerKitchen;
-}
-
-std::size_t Reception::getRestockTime() const
-{
-    return _restockTime;
-}
-
-void Reception::updateShell()
-{
-    struct timeval tv = { 0, 250000L };
-    fd_set fds;
-
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds);
-    int ready = select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
-    if (ready < 0)
-        throw Error("select failed.");
-    if (ready > 0)
-        std::getline(std::cin, _shellLine);
-    else
-        _shellLine = "";
-}
-
-bool cmp(const Kitchen &lhs, const Kitchen &rhs)
-{
-    return lhs.getTotalPizze() < rhs.getTotalPizze();
-}
-
-void Reception::sendPizzaToKitchen(const Pizza &pizza)
-{
-    std::vector<Kitchen> kitchensCanCook;
-
-    for (const auto kitchen : _kitchens)
-        if (kitchen.canCookPizza(pizza))
-            kitchensCanCook.push_back(kitchen);
-
-    if (kitchensCanCook.empty()) {
-        Kitchen k(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
-        Processes p(k);
-        _kitchens.push_back(k);
-    }
-    else {
-        Kitchen k(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp));
-        Processes p(k);
-        _kitchens.push_back(k);
-    }
-    _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
-    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
-    std::cout <<"Order: pizza " << pizzaTypesToString.find(pizza.getPizzaType())->second << " size "
-    << pizzaSizesToString.find(pizza.getPizzaSize())->second << " sent to the kitchen." << std::endl;
-}
-
-void Reception::manageNewOrder(const std::string &line)
-{
-    try {
-        std::stringstream stream(line);
-        std::string segment;
-        std::vector<Pizza> pizze;
-
-        while (std::getline(stream, segment, ';'))
-            for (const auto &pizza: parsePizza(segment))
-                pizze.push_back(pizza);
-        for (const auto &pizza : pizze)
-            sendPizzaToKitchen(pizza);
-        _orders.push_back(pizze);
-    } catch (Error &e) {
-        std::cerr << e.what() << std::endl;
-    }
 }
 
 void Reception::displayOrder(const std::vector<Pizza> &pizze)
@@ -202,6 +101,40 @@ int Reception::checkLastArg(std::string &tmp)
     return stod(tmp);
 }
 
+void Reception::updateShell()
+{
+    struct timeval tv = { 0, 250000L };
+    fd_set fds;
+
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+    int ready = select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
+    if (ready < 0)
+        throw Error("select failed.");
+    if (ready > 0)
+        std::getline(std::cin, _shellLine);
+    else
+        _shellLine = "";
+}
+
+void Reception::manageNewOrder(const std::string &line)
+{
+    try {
+        std::stringstream stream(line);
+        std::string segment;
+        std::vector<Pizza> pizze;
+
+        while (std::getline(stream, segment, ';'))
+            for (const auto &pizza: parsePizza(segment))
+                pizze.push_back(pizza);
+        for (const auto &pizza : pizze)
+            sendPizzaToKitchen(pizza);
+        _orders.push_back(pizze);
+    } catch (Error &e) {
+        std::cerr << e.what() << std::endl;
+    }
+}
+
 std::vector<Pizza> Reception::parsePizza(const std::string &segment)
 {
     std::string tmp;
@@ -231,9 +164,60 @@ std::vector<Pizza> Reception::parsePizza(const std::string &segment)
     return pizze;
 }
 
-const MessageQueue &Reception::getMessageQueue() const
+bool cmpTotalPizze(const Kitchen &lhs, const Kitchen &rhs)
 {
-    return _msg;
+    return lhs.getTotalPizze() < rhs.getTotalPizze();
+}
+
+void Reception::sendPizzaToKitchen(const Pizza &pizza)
+{
+    std::vector<Kitchen> kitchensCanCook;
+
+    for (const auto kitchen : _kitchens)
+        if (kitchen.canCookPizza(pizza))
+            kitchensCanCook.push_back(kitchen);
+
+    if (kitchensCanCook.empty()) {
+        Kitchen k(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
+        Processes p(k);
+        _kitchens.push_back(k);
+    }
+    else {
+        Kitchen k(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmpTotalPizze));
+        Processes p(k);
+        _kitchens.push_back(k);
+    }
+    _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
+    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
+    std::cout <<"Order: pizza " << pizzaTypesToString.find(pizza.getPizzaType())->second << " size "
+    << pizzaSizesToString.find(pizza.getPizzaSize())->second << " sent to the kitchen." << std::endl;
+}
+
+void Reception::receiveCookedPizza()
+{
+    while (_end) {
+        try {
+            Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+            bool orderReady;
+
+            for (auto it = std::begin(_orders); it != std::end(_orders); ++it) {
+                orderReady = true;
+                for (auto &refPizza : *it) {
+                    if (!pizza.getIsCooked() && pizza == refPizza)
+                        refPizza.setIsCooked(true);
+                    if (!pizza.getIsCooked())
+                        orderReady = false;
+                }
+                if (orderReady) {
+                    displayOrder(*it);
+                    (*it).clear();
+                    _orders.erase(it);
+                    break;
+                }
+            }
+        } catch (CommunicationError &e) {
+        }
+    }
 }
 
 std::chrono::_V2::system_clock::time_point Reception::restockClock(std::chrono::_V2::system_clock::time_point start)

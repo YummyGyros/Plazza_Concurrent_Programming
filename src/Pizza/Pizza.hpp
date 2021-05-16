@@ -8,25 +8,26 @@
 #ifndef PIZZA_HPP_
 #define PIZZA_HPP_
 
+#include " IPizza.hpp"
 #include "PizzaDefinitions.hpp"
 #include <string>
 #include <map>
 
-class Pizza {
+class Pizza : public IPizza {
     public:
         Pizza();
+        ~Pizza() override;
         Pizza(PizzaType _type, PizzaSize _size);
         Pizza(const Pizza &pizza);
-        ~Pizza() = default;
         bool operator==(const Pizza &rhs) const;
 
-        void setPizzaType(const PizzaType type);
-        void setPizzaSize(const PizzaSize size);
-        void setIsCooked(const bool isCooked);
+        void setPizzaType(const PizzaType type) override;
+        void setPizzaSize(const PizzaSize size) override;
+        void setIsCooked(const bool isCooked) override;
 
-        PizzaType getPizzaType() const;
-        PizzaSize getPizzaSize() const;
-        bool getIsCooked() const;
+        PizzaType getPizzaType() const override;
+        PizzaSize getPizzaSize() const override;
+        bool getIsCooked() const override;
     protected:
     private:
         PizzaType _type;

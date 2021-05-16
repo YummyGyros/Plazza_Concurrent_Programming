@@ -10,7 +10,7 @@
 Kitchen::Kitchen(const Kitchen &kitchen)
     : _timeMul(std::move(kitchen._timeMul)), _nbCooks(std::move(kitchen._nbCooks)),
     _restockTime(std::move(kitchen._restockTime)), _totalPizze(0), _isAlive(true), _lifeTime(5),
-    _msg(std::move(kitchen._id)), _id(std::move(kitchen._id)), _receptionId(kitchen._receptionId), _dogEnd(true),
+    _msg(std::move(kitchen._id)), _id(std::move(kitchen._id)), _receptionId(kitchen._receptionId), _end(true),
     _fridge({
         {tomato, 5},
         {gruyere, 5},
@@ -25,7 +25,7 @@ Kitchen::Kitchen(const Kitchen &kitchen)
 }
 
 Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime, int receptionId)
-    : _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true), _lifeTime(5), _dogEnd(true),
+    : _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true), _lifeTime(5), _end(true),
     _msg("Kitchen" + name), _id(name), _receptionId(receptionId),
     _fridge({
         {tomato, 5},
@@ -46,7 +46,7 @@ Kitchen::~Kitchen()
 
 void Kitchen::receiveCookedPizza()
 {
-    while (_dogEnd) {
+    while (_end) {
         try {
             Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
             _queue.push(std::make_pair(pizza.getPizzaType(), pizza.getPizzaSize()));
@@ -57,9 +57,9 @@ void Kitchen::receiveCookedPizza()
 
 bool Kitchen::canCookPizza(const Pizza &pizza) const
 {
-    auto recipe = Recipes.find(pizza.getPizzaType());
+    auto recipe = recipes.find(pizza.getPizzaType());
 
-    for (ingredients_e ingr: recipe->second) {
+    for (Ingredients ingr: recipe->second) {
         if (_fridge.find(ingr)->second == 0)
             return false;
     }
@@ -68,7 +68,7 @@ bool Kitchen::canCookPizza(const Pizza &pizza) const
 
 void Kitchen::takePizzaInCharge(const Pizza &pizza)
 {
-    for (ingredients_e ingr: Recipes.find(pizza.getPizzaType())->second)
+    for (Ingredients ingr: recipes.find(pizza.getPizzaType())->second)
         _fridge[ingr] -= 1;
     _totalPizze++;
 }
@@ -136,7 +136,7 @@ void Kitchen::restockFridge()
         ingr.second++;
 }
 
-const std::unordered_map<ingredients_e, std::size_t> &Kitchen::getFridge() const
+const std::unordered_map<Ingredients, std::size_t> &Kitchen::getFridge() const
 {
     return _fridge;
 }

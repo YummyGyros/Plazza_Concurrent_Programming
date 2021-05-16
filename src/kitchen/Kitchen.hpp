@@ -37,14 +37,14 @@ class Kitchen {
 
         void restockFridge();
         void receiveCookedPizza();
-        const std::unordered_map<ingredients_e, std::size_t> &getFridge() const;
+        const std::unordered_map<Ingredients, std::size_t> &getFridge() const;
 
     private:
         std::string _id;
         MessageQueue _msg;
         Serializing _srl;
         int _receptionId;
-        bool _dogEnd;
+        bool _end;
 
         float _timeMul;
         std::size_t _nbCooks;
@@ -55,6 +55,6 @@ class Kitchen {
         int _lifeTime;
 
         std::thread _receive;
-        std::unordered_map<ingredients_e, std::size_t> _fridge;
+        std::unordered_map<Ingredients, std::size_t> _fridge;
         SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
 };

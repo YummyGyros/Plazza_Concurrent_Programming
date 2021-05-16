@@ -10,12 +10,13 @@
 
 #include <unordered_map>
 #include <string>
+#include <vector>
 
 enum PizzaType
 {
-    Regina = 1 ,
-    Margarita = 2 ,
-    Americana = 4 ,
+    Regina = 1,
+    Margarita = 2,
+    Americana = 4,
     Fantasia = 8
 };
 
@@ -24,8 +25,27 @@ enum PizzaSize
     S = 1,
     M = 2,
     L = 4,
-    XL = 8 ,
+    XL = 8,
     XXL = 16
+};
+
+enum Ingredients
+{
+    tomato,
+    gruyere,
+    ham,
+    mushrooms,
+    steak,
+    eggplant,
+    goatCheese,
+    chiefLove
+};
+
+static const std::unordered_map<PizzaType, std::vector<Ingredients>> recipes = {
+    {Regina, {tomato, gruyere}},
+    {Margarita, {tomato, gruyere, ham, mushrooms}},
+    {Americana, {tomato, gruyere, steak}},
+    {Fantasia, {tomato, eggplant, goatCheese, chiefLove}}
 };
 
 const std::unordered_map<PizzaType, std::string> pizzaTypesToString = {
