@@ -19,7 +19,6 @@
 class Kitchen {
     public:
         Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime, int recpetionId);
-        Kitchen(const Kitchen &kitchen);
         ~Kitchen();
 
         void startWork();

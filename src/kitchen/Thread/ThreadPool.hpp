@@ -27,7 +27,7 @@ static const std::unordered_map<PizzaType, float> timeToCook = {
 
 class ThreadPool {
     public:
-        ThreadPool(float, std::size_t, SafeQueue<std::pair<PizzaType, PizzaSize>> &, MessageQueue, int);
+        ThreadPool(float, std::size_t, SafeQueue<std::pair<PizzaType, PizzaSize>> &, MessageQueue &, int);
         ~ThreadPool();
 
         void cook(SafeQueue<std::pair<PizzaType, PizzaSize>> &);
@@ -38,7 +38,7 @@ class ThreadPool {
         std::size_t _numberCooks;
         float _timeMultiplier;
 
-        MessageQueue _msg;
+        MessageQueue &_msg;
         int _receptionId;
         Serializing _srl;
 };

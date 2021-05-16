@@ -76,6 +76,8 @@ void Reception::displayOrder(const std::vector<std::shared_ptr<Pizza>> &pizze)
 
 void Reception::displayStatus()
 {
+    std::size_t cooks = 0;
+
     if (_kitchens.empty())
         displayString("No kitchen exist at this time.");
     else
@@ -84,6 +86,13 @@ void Reception::displayStatus()
         auto fridge = kitchen->getFridge();
         displayString("kitchen " + kitchen->getId() + ":");
         displayString("\tpizze in charge: " + kitchen->getTotalPizze());
+        // cooks << [](const std::shared_ptr<Kitchen> &kitchen){
+        //     if (kitchen->getTotalPizze() > kitchen->getNbCooks())
+        //         return kitchen->getTotalPizze() - kitchen->getNbCooks();
+        //     else
+        //         return kitchen->getTotalPizze();
+        // }
+        // displayString ("active cooks: " + cooks);
         for (auto ingredient : fridge)
             displayString("\t" + ingredientsToString.find(ingredient.first)->second + ":" + std::to_string(ingredient.second));
         displayString("==========================");
