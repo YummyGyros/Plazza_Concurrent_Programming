@@ -35,7 +35,6 @@ void Kitchen::receiveCookedPizza()
         try {
             pizza_order_t pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
             _queue.push(std::make_pair(pizzaMsg.type, pizzaMsg.size));
-            // takePizzaInCharge(Pizza(pizzaMsg.type, pizzaMsg.size));
         } catch (CommunicationError &e) {
         }
     }
@@ -72,11 +71,11 @@ void Kitchen::startWork()
     _receive = std::thread(&Kitchen::receiveCookedPizza, this);
 
     while (_isAlive) {
-        // if (!_queue.getQueue().empty())
-        //     _clock = std::chrono::high_resolution_clock::now();
-        // auto time = std::chrono::high_resolution_clock::now();
-        // if (std::chrono::duration_cast<std::chrono::milliseconds>(time - _clock).count() > 5000)
-        //     _isAlive = false;
+        if (!_queue.getQueue().empty())
+            _clock = std::chrono::high_resolution_clock::now();
+        auto time = std::chrono::high_resolution_clock::now();
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(time - _clock).count() > 5000 + 4000 * _timeMul)
+            _isAlive = false;
     }
     std::cout << "goodbye" << std::endl;
     _msg.sendMsg(destroy_order, _receptionId);

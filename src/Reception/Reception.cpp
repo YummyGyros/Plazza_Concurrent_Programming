@@ -175,7 +175,6 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
     std::vector<std::shared_ptr<Kitchen>> kitchensCanCook;
     std::shared_ptr<Kitchen> ptrKitchen;
-    std::cout << _kitchens.size() << std::endl;
 
     for (const auto &kitchen : _kitchens)
         if (kitchen->canCookPizza(pizza))
@@ -201,7 +200,6 @@ void Reception::receiveCookedPizza()
             pizza_order_t pizzaMsg = {1, 1, Regina, S, 0};
             pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
             if (pizzaMsg.destroy == true) {
-                std::cout << "kitchen : " << pizzaMsg.id << " destroyed" << std::endl;
                 for (auto kitchen = _kitchens.begin(); kitchen != _kitchens.end(); ++kitchen)
                     if (kitchen->get()->getMessageQueue().getMsgid() == pizzaMsg.id) {
                         _kitchens.erase(kitchen);
