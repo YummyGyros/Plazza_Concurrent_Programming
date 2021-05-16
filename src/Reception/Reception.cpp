@@ -75,9 +75,9 @@ void Reception::displayStatus()
     else
         std::cout <<"=========Status===========" << std::endl;
     for (const auto &kitchen : _kitchens) {
-        auto fridge = kitchen.getFridge();
-        std::cout << kitchen.getId() << ":" << std::endl;
-        std::cout <<"\tpizze in charge: "<< kitchen.getTotalPizze() << std::endl;
+        auto fridge = kitchen->getFridge();
+        std::cout << kitchen->getId() << ":" << std::endl;
+        std::cout <<"\tpizze in charge: "<< kitchen->getTotalPizze() << std::endl;
         for (auto ingredient : fridge)
             std::cout <<"\t" << ingredient.first << ":\t" << ingredient.second << std::endl;
         std::cout <<"==========================" << std::endl;
@@ -156,31 +156,30 @@ std::vector<Pizza> Reception::parsePizza(const std::string &segment)
     return pizze;
 }
 
-bool cmpTotalPizze(const Kitchen &lhs, const Kitchen &rhs)
+bool cmpTotalPizze(const std::shared_ptr<Kitchen> &lhs, const std::shared_ptr<Kitchen> &rhs)
 {
-    return lhs.getTotalPizze() < rhs.getTotalPizze();
+    return lhs->getTotalPizze() < rhs->getTotalPizze();
 }
 
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
-    std::vector<Kitchen> kitchensCanCook;
+    std::vector<std::shared_ptr<Kitchen>> kitchensCanCook;
 
-    for (const auto kitchen : _kitchens)
-        if (kitchen.canCookPizza(pizza))
-            kitchensCanCook.push_back(kitchen);
+    for (const auto &kitchen : _kitchens)
+        if (kitchen->canCookPizza(pizza))
+            kitchensCanCook.emplace_back(kitchen);
 
     if (kitchensCanCook.empty()) {
-        Kitchen k(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
-        Processes p(k);
-        _kitchens.push_back(k);
+        auto k = std::make_shared<Kitchen>(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
+        Processes p(*k);
+        _kitchens.push_back(std::move(k));
+    } else {
+        auto k = *std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmpTotalPizze);
+        Processes p(*k);
+        _kitchens.push_back(std::move(k));
     }
-    else {
-        Kitchen k(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmpTotalPizze));
-        Processes p(k);
-        _kitchens.push_back(k);
-    }
-    _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
-    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
+    _kitchens.at(_kitchens.size() - 1)->takePizzaInCharge(pizza);
+    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1)->getMessageQueue().getMsgid());
     std::cout <<"Order: " << pizza.getType() << " size " << pizza.getSize() << " sent to the kitchen." << std::endl;
 }
 
@@ -218,7 +217,7 @@ std::chrono::_V2::system_clock::time_point Reception::restockClock(std::chrono::
 
     if (timer.count() >= _restockTime) {
         for (auto &kitchen : _kitchens)
-            kitchen.restockFridge();
+            kitchen->restockFridge();
         start = std::chrono::high_resolution_clock::now();
     }
     return start;
