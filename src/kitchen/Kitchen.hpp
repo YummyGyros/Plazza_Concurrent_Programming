@@ -34,6 +34,7 @@ class Kitchen {
         const std::size_t &getNbCooks() const;
         const std::size_t &getRestockTime() const;
         const std::size_t &getTotalPizze() const;
+        void setTotalPizze(const std::size_t &totalPizze);
 
         void restockFridge();
         void receiveCookedPizza();

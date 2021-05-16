@@ -191,6 +191,10 @@ void Reception::receiveCookedPizza()
             pizza_order_t pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
             bool orderReady;
 
+            for (auto &kitchen : _kitchens)
+                if (kitchen->getMessageQueue().getMsgid() == pizzaMsg.id)
+                    kitchen->setTotalPizze(kitchen->getTotalPizze() - 1);
+
             for (auto it = std::begin(_orders); it != std::end(_orders); ++it) {
                 orderReady = true;
                 for (auto &refPizza : *it) {
