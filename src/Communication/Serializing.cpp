@@ -28,7 +28,7 @@ std::unordered_map<Ingredients, std::size_t> Serializing::unpack(status_t stock)
     return fridge;
 }
 
-pizza_order_t Serializing::pack(Pizza pizza, int myid)
+pizza_order_t Serializing::pack(const Pizza &pizza, int myid)
 {
     return {1, myid,pizza.getType(), pizza.getSize()};
 }
