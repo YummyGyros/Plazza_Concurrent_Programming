@@ -8,7 +8,7 @@
 #include "Kitchen.hpp"
 
 Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime, int receptionId)
-    : _id(name), _msg("Kitchen" + name),  _receptionId(receptionId),  _end(true), _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true),
+    : _id(name), _msg("Kitchen" + name),  _receptionId(receptionId),  _end(true), _clock(std::chrono::high_resolution_clock::now()), _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true),
     _fridge({
         {tomato, 5},
         {gruyere, 5},
@@ -21,6 +21,7 @@ Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, st
     })
 {
     SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
+    std::cout << "NewKitch" << std::endl;
 }
 
 Kitchen::~Kitchen()
@@ -33,6 +34,7 @@ void Kitchen::receiveCookedPizza()
         try {
             pizza_order_t pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
             _queue.push(std::make_pair(pizzaMsg.type, pizzaMsg.size));
+            // takePizzaInCharge(Pizza(pizzaMsg.type, pizzaMsg.size));
         } catch (CommunicationError &e) {
         }
     }
@@ -65,13 +67,18 @@ void Kitchen::startWork()
 {
 
     ThreadPool threads(_timeMul, _nbCooks, _queue, _msg, _receptionId);
+    pizza_order_t destroy_order = {1, _msg.getMsgid(), Regina, S, true};
     _receive = std::thread(&Kitchen::receiveCookedPizza, this);
 
     while (_isAlive) {
+        if (!_queue.getQueue().empty())
+            _clock = std::chrono::high_resolution_clock::now();
         auto time = std::chrono::high_resolution_clock::now();
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(_clock - time).count() > 5)
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(time - _clock).count() > 5000)
             _isAlive = false;
     }
+    std::cout << "goodbye" << std::endl;
+    _msg.sendMsg(destroy_order, _receptionId);
     std::exit(0);
 }
 

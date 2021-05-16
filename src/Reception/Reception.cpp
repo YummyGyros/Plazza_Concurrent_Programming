@@ -34,7 +34,6 @@ Reception::Reception(char **av, const std::string &pathLogfile)
 
     while (1) {
         start = restockClock(start);
-        deleteKitchen();
         updateShell();
         if (_shellLine.compare("") != 0) {
             if (_shellLine.compare("status") == 0)
@@ -56,17 +55,7 @@ Reception::~Reception()
     _orders.clear();
     _kitchens.clear();
     _logfile.close();
-}
-
-void Reception::deleteKitchen()
-{
-    for (auto kitchen = _kitchens.begin(); kitchen != _kitchens.end(); ++kitchen) {
-        if (kitchen->get()->checkIsAlive() == false) {
-            kitchen = _kitchens.erase(kitchen);
-            kitchen--;
-        } else if (kitchen->get()->getTotalPizze() != 0)
-            kitchen->get()->startClock();
-    }
+    std::remove("Reception");
 }
 
 void Reception::displayString(const std::string &str)
@@ -185,12 +174,14 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
     std::vector<std::shared_ptr<Kitchen>> kitchensCanCook;
     std::shared_ptr<Kitchen> ptrKitchen;
+    std::cout << _kitchens.size() << std::endl;
 
     for (const auto &kitchen : _kitchens)
         if (kitchen->canCookPizza(pizza))
             kitchensCanCook.emplace_back(kitchen);
 
     if (kitchensCanCook.empty()) {
+        std::cout << "empty" << std::endl;
         ptrKitchen = std::make_shared<Kitchen>(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
         Processes p(*ptrKitchen);
         _kitchens.push_back(ptrKitchen);
@@ -208,7 +199,17 @@ void Reception::receiveCookedPizza()
 {
     while (_end) {
         try {
-            pizza_order_t pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+            pizza_order_t pizzaMsg = {1, 1, Regina, S, 0};
+            pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+            if (pizzaMsg.destroy == true) {
+                std::cout << "kitchen : " << pizzaMsg.id << " destroyed" << std::endl;
+                for (auto kitchen = _kitchens.begin(); kitchen != _kitchens.end(); ++kitchen)
+                    if (kitchen->get()->getMessageQueue().getMsgid() == pizzaMsg.id) {
+                        _kitchens.erase(kitchen);
+                        break;
+                    }
+                break;
+            }
             bool orderReady;
 
             for (auto &kitchen : _kitchens) {
