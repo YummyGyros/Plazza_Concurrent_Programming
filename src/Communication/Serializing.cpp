@@ -7,9 +7,9 @@
 
 #include "Serializing.hpp"
 
-Pizza Serializing::unpack(pizza_order_t pizza)
+pizza_order_t Serializing::unpack(pizza_order_t order)
 {
-    return Pizza(pizza.type, pizza.size);
+    return order;
 }
 
 std::unordered_map<Ingredients, std::size_t> Serializing::unpack(status_t stock)

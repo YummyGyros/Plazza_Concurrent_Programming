@@ -48,9 +48,9 @@ void Kitchen::receiveCookedPizza()
 {
     while (_end) {
         try {
-            Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+            pizza_order_t pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
             std::cout << "get message" << std::endl;
-            _queue.push(std::make_pair(pizza.getType(), pizza.getSize()));
+            _queue.push(std::make_pair(pizzaMsg.type, pizzaMsg.size));
         } catch (CommunicationError &e) {
         }
     }

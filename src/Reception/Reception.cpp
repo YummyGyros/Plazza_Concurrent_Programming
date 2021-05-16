@@ -181,22 +181,22 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
     }
     _kitchens.at(_kitchens.size() - 1)->takePizzaInCharge(pizza);
     _msg.sendMsg<pizza_order_t>(_srl.pack(pizza, _msg.getMsgid()), _kitchens.at(_kitchens.size() - 1)->getMessageQueue().getMsgid());
-    std::cout <<"Order: " << pizza.getType() << " size " << pizza.getSize() << " sent to the kitchen." << std::endl;
+    std::cout <<"Order: " << pizza.getTypeStr() << " size " << pizza.getSizeStr() << " sent to the kitchen." << std::endl;
 }
 
 void Reception::receiveCookedPizza()
 {
     while (_end) {
         try {
-            Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+            pizza_order_t pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
             bool orderReady;
 
             for (auto it = std::begin(_orders); it != std::end(_orders); ++it) {
                 orderReady = true;
                 for (auto &refPizza : *it) {
-                    if (!pizza.getIsCooked() && pizza == *refPizza)
+                    if (!refPizza->getIsCooked() && pizzaMsg.size == refPizza->getSize() && pizzaMsg.type == refPizza->getType())
                         refPizza->setIsCooked(true);
-                    if (!pizza.getIsCooked())
+                    if (!refPizza->getIsCooked())
                         orderReady = false;
                 }
                 if (orderReady) {
