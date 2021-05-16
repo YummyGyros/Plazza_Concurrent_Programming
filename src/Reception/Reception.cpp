@@ -63,7 +63,7 @@ void Reception::displayOrder(const std::vector<Pizza> &pizze)
     std::cout <<"Order Ready" << std::endl;
     std::cout <<"--------------------------" << std::endl;
     for (const auto &pizza : pizze)
-        std::cout <<"\tpizza:\ttype:\t" << pizza.getTypeStr() << "\t\tsize:\t" << pizza.getSizeStr() << std::endl;
+        std::cout <<"\tpizza:\ttype:\t" << pizza.getType() << "\t\tsize:\t" << pizza.getSize() << std::endl;
     std::cout <<"       Buon Appetito      " << std::endl;
     std::cout <<"==========================" << std::endl;
 }
@@ -181,7 +181,7 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
     }
     _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
     _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
-    std::cout <<"Order: " << pizza.getTypeStr() << " size " << pizza.getSizeStr() << " sent to the kitchen." << std::endl;
+    std::cout <<"Order: " << pizza.getType() << " size " << pizza.getSize() << " sent to the kitchen." << std::endl;
 }
 
 void Reception::receiveCookedPizza()
