@@ -22,7 +22,6 @@ Kitchen::Kitchen(const Kitchen &kitchen)
         {chiefLove, 5}
     })
 {
-    _receive = std::thread(&Kitchen::receiveCookedPizza, this);
 }
 
 Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime, int receptionId)
@@ -39,22 +38,21 @@ Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, st
         {chiefLove, 5}
     })
 {
-    _receive = std::thread(&Kitchen::receiveCookedPizza, this);
 }
 
 Kitchen::~Kitchen()
 {
-    _receive.join();
 }
 
 void Kitchen::receiveCookedPizza()
 {
-    // while (_dogEnd) {
-    //     try {
-    //         takeOrders();
-    //     } catch (CommunicationError &e) {
-    //     }
-    // }
+    while (_dogEnd) {
+        try {
+            Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
+            _queue.push(std::make_pair(pizza.getPizzaType(), pizza.getPizzaSize()));
+        } catch (CommunicationError &e) {
+        }
+    }
 }
 
 bool Kitchen::canCookPizza(const Pizza &pizza) const
@@ -89,22 +87,17 @@ void Kitchen::checkIsAlive(ThreadPool &threads)
         _isAlive = false;
 }
 
-void Kitchen::takeOrders()
-{
-    // note a effacer quand vue: pourquoi pas directement le faire dans le try?
-    Pizza pizza = _srl.unpack(_msg.recvMsg<pizza_order_t>());
-    _queue.push(std::make_pair(pizza.getPizzaType(), pizza.getPizzaSize()));
-}
-
 void Kitchen::startWork()
 {
+
     SafeQueue<std::pair<PizzaType, PizzaSize>> _queue;
     ThreadPool threads(_timeMul, _nbCooks, _queue, _msg, _receptionId);
-    _orders = std::thread(&Kitchen::takeOrders, this);
+    _receive = std::thread(&Kitchen::receiveCookedPizza, this);
 
     while (_isAlive) {
-        checkIsAlive(threads);
+        //checkIsAlive(threads);
     }
+    std::exit(0);
 }
 
 const MessageQueue &Kitchen::getMessageQueue() const

@@ -124,10 +124,16 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
         if (kitchen.canCookPizza(pizza))
             kitchensCanCook.push_back(kitchen);
 
-    if (kitchensCanCook.empty())
-        _kitchens.push_back(Kitchen(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid()));
-    else
-        _kitchens.push_back(Kitchen(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp)));
+    if (kitchensCanCook.empty()) {
+        Kitchen k(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
+        Processes p(k);
+        _kitchens.push_back(k);
+    }
+    else {
+        Kitchen k(*std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmp));
+        Processes p(k);
+        _kitchens.push_back(k);
+    }
     _kitchens.at(_kitchens.size() - 1).takePizzaInCharge(pizza);
     _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1).getMessageQueue().getMsgid());
     std::cout <<"Order: pizza " << pizzaTypesToString.find(pizza.getPizzaType())->second << " size "

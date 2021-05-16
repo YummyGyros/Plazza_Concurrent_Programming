@@ -32,9 +32,4 @@ ThreadPool::ThreadPool(float timeMult, std::size_t numberCooks, SafeQueue<std::p
         _threads.push_back(std::move(std::thread(&ThreadPool::cook, this, std::ref(queue))));
         n++;
     }
-    for (std::thread & th : _threads) {
-        if (th.joinable()) {
-            th.join();
-        }
-    }
 }

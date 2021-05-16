@@ -8,7 +8,7 @@
 #include "Processes.hpp"
 #include "ProcessesError.hpp"
 
-Processes::Processes(Kitchen& kitchen)
+Processes::Processes(Kitchen &kitchen)
 {
     _status = false;
     _pid = fork();

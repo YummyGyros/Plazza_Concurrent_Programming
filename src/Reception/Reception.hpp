@@ -18,6 +18,7 @@
 
 #include "Pizza.hpp"
 #include "Kitchen.hpp"
+#include "Processes.hpp"
 
 class Reception {
     public:
