@@ -133,3 +133,13 @@ std::size_t Kitchen::calcActiveCooks() const
 {
     return _totalPizze > _nbCooks ? _totalPizze - _nbCooks : _totalPizze;
 }
+
+void Kitchen::startClock()
+{
+    _clock = std::chrono::high_resolution_clock::now();
+}
+
+const std::chrono::_V2::system_clock::time_point &Kitchen::getClock() const
+{
+    return _clock;
+}

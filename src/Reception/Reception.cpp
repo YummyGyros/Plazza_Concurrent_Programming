@@ -34,6 +34,7 @@ Reception::Reception(char **av, const std::string &pathLogfile)
 
     while (1) {
         start = restockClock(start);
+        deleteKitchen();
         updateShell();
         if (_shellLine.compare("") != 0) {
             if (_shellLine.compare("status") == 0)
@@ -55,6 +56,18 @@ Reception::~Reception()
     _orders.clear();
     _kitchens.clear();
     _logfile.close();
+}
+
+void Reception::deleteKitchen()
+{
+    auto time = std::chrono::high_resolution_clock::now();
+
+    for (auto kitchen : _kitchens) {
+        if (kitchen->getTotalPizze() != 0)
+            kitchen->startClock();
+        else if (std::chrono::duration_cast<std::chrono::milliseconds>(kitchen->getClock() - time).count() > 5)
+            _kitchens.erase(std::find(_kitchens.begin(), _kitchens.end(), kitchen));
+    }
 }
 
 void Reception::displayString(const std::string &str)
@@ -199,9 +212,10 @@ void Reception::receiveCookedPizza()
             pizza_order_t pizzaMsg = _srl.unpack(_msg.recvMsg<pizza_order_t>());
             bool orderReady;
 
-            for (auto &kitchen : _kitchens)
+            for (auto &kitchen : _kitchens) {
                 if (kitchen->getMessageQueue().getMsgid() == pizzaMsg.id)
                     kitchen->setTotalPizze(kitchen->getTotalPizze() - 1);
+            }
 
             for (auto it = std::begin(_orders); it != std::end(_orders); ++it) {
                 orderReady = true;

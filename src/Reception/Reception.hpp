@@ -16,6 +16,7 @@
 #include <ratio>
 #include <fstream>
 #include <memory>
+#include <list>
 
 #include "Pizza.hpp"
 #include "Kitchen.hpp"
@@ -44,12 +45,13 @@ class Reception {
         // KITCHENS Functions
         std::chrono::_V2::system_clock::time_point restockClock
         (std::chrono::_V2::system_clock::time_point);
+        void deleteKitchen();
 
         // PARSING Variables
         std::string _shellLine;
 
         // KITCHENS Variables
-        std::vector<std::shared_ptr<Kitchen>> _kitchens;
+        std::list<std::shared_ptr<Kitchen>> _kitchens;
         std::vector<std::vector<std::shared_ptr<Pizza>>> _orders;
         std::size_t _kitchensId;
         float _timeMultiplier;

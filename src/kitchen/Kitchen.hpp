@@ -37,6 +37,9 @@ class Kitchen {
 
         void restockFridge();
         void receiveCookedPizza();
+        void startClock();
+        const std::chrono::_V2::system_clock::time_point &getClock() const;
+
         const std::unordered_map<Ingredients, std::size_t> &getFridge() const;
 
         std::size_t calcActiveCooks() const;
@@ -48,6 +51,7 @@ class Kitchen {
         int _receptionId;
         bool _end;
 
+        std::chrono::_V2::system_clock::time_point _clock;
         float _timeMul;
         std::size_t _nbCooks;
         std::size_t _restockTime;
