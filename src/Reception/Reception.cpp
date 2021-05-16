@@ -165,23 +165,24 @@ bool cmpTotalPizze(const std::shared_ptr<Kitchen> &lhs, const std::shared_ptr<Ki
 void Reception::sendPizzaToKitchen(const Pizza &pizza)
 {
     std::vector<std::shared_ptr<Kitchen>> kitchensCanCook;
+    std::shared_ptr<Kitchen> ptrKitchen;
 
     for (const auto &kitchen : _kitchens)
         if (kitchen->canCookPizza(pizza))
             kitchensCanCook.emplace_back(kitchen);
 
     if (kitchensCanCook.empty()) {
-        auto k = std::make_shared<Kitchen>(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
-        Processes p(*k);
-        _kitchens.push_back(std::move(k));
-    } else {
-        auto k = *std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmpTotalPizze);
-        Processes p(*k);
-        _kitchens.push_back(std::move(k));
-    }
-    _kitchens.at(_kitchens.size() - 1)->takePizzaInCharge(pizza);
-    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza, _msg.getMsgid()), _kitchens.at(_kitchens.size() - 1)->getMessageQueue().getMsgid());
-    std::cout <<"Order: " << pizza.getTypeStr() << " size " << pizza.getSizeStr() << " sent to the kitchen." << std::endl;
+        ptrKitchen = std::make_shared<Kitchen>(std::to_string(++_kitchensId), _timeMultiplier, _cooksPerKitchen, _restockTime, _msg.getMsgid());
+        Processes p(*ptrKitchen);
+        _kitchens.push_back(std::move(ptrKitchen));
+    } else
+        ptrKitchen = *std::min_element(kitchensCanCook.begin(), kitchensCanCook.end(), cmpTotalPizze);
+    for (const auto &kitchen : _kitchens)
+        if (kitchen->getId().compare(ptrKitchen->getId()) == 0) {
+            kitchen->takePizzaInCharge(pizza);
+            _msg.sendMsg<pizza_order_t>(_srl.pack(pizza, _msg.getMsgid()), ptrKitchen->getMessageQueue().getMsgid());
+            std::cout <<"[sent]: " << pizza.getTypeStr() << " size " << pizza.getSizeStr() << " to " << kitchen->getId() << std::endl;
+        }
 }
 
 void Reception::receiveCookedPizza()
