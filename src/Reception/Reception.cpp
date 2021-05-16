@@ -77,7 +77,13 @@ void Reception::displayStatus()
     for (const auto &kitchen : _kitchens) {
         auto fridge = kitchen->getFridge();
         std::cout << kitchen->getId() << ":" << std::endl;
-        std::cout <<"\tpizze in charge: "<< kitchen->getTotalPizze() << std::endl;
+        std::cout << "pizze in charge: " << kitchen->getTotalPizze() << std::endl;
+        std::cout << "active cooks: "<< [](const std::shared_ptr<Kitchen> &kitchen){
+            if (kitchen->getTotalPizze() > kitchen->getNbCooks())
+                return kitchen->getTotalPizze() - kitchen->getNbCooks();
+            else
+                return kitchen->getTotalPizze();
+        }  << std::endl;
         for (auto ingredient : fridge)
             std::cout <<"\t" << ingredient.first << ":\t" << ingredient.second << std::endl;
         std::cout <<"==========================" << std::endl;
