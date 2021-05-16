@@ -131,7 +131,8 @@ const std::size_t &Kitchen::getTotalPizze() const
 void Kitchen::restockFridge()
 {
     for (auto &ingr : _fridge)
-        ingr.second++;
+        if (ingr.second < 5)
+            ingr.second++;
 }
 
 const std::unordered_map<Ingredients, std::size_t> &Kitchen::getFridge() const
