@@ -143,6 +143,9 @@ std::vector<std::shared_ptr<Pizza>> Reception::parsePizza(const std::string &seg
     int quantity;
 
     stream >> type;
+    std::for_each(type.begin(), type.end(), [](char &c) {
+        c = ::tolower(c);
+    });
     stream >> size;
     stream >> tmp;
     quantity = checkLastArg(tmp);
