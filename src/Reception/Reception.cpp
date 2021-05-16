@@ -60,13 +60,12 @@ Reception::~Reception()
 
 void Reception::deleteKitchen()
 {
-    auto time = std::chrono::high_resolution_clock::now();
-
-    for (auto kitchen : _kitchens) {
-        if (kitchen->getTotalPizze() != 0)
-            kitchen->startClock();
-        else if (std::chrono::duration_cast<std::chrono::milliseconds>(kitchen->getClock() - time).count() > 5)
-            _kitchens.erase(std::find(_kitchens.begin(), _kitchens.end(), kitchen));
+    for (auto kitchen = _kitchens.begin(); kitchen != _kitchens.end(); ++kitchen) {
+        if (kitchen->get()->checkIsAlive() == false) {
+            kitchen = _kitchens.erase(kitchen);
+            kitchen--;
+        } else if (kitchen->get()->getTotalPizze() != 0)
+            kitchen->get()->startClock();
     }
 }
 

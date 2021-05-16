@@ -8,7 +8,7 @@
 #include "Kitchen.hpp"
 
 Kitchen::Kitchen(const std::string &name, float timeMul, std::size_t nbCooks, std::size_t restockTime, int receptionId)
-    : _id(name), _msg("Kitchen" + name),  _receptionId(receptionId),  _end(true), _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true), _lifeTime(5),
+    : _id(name), _msg("Kitchen" + name),  _receptionId(receptionId),  _end(true), _timeMul(timeMul), _nbCooks(nbCooks), _restockTime(restockTime), _totalPizze(0), _isAlive(true),
     _fridge({
         {tomato, 5},
         {gruyere, 5},
@@ -56,18 +56,9 @@ void Kitchen::takePizzaInCharge(const Pizza &pizza)
     _totalPizze++;
 }
 
-void Kitchen::checkIsAlive()
+bool Kitchen::checkIsAlive()
 {
-    static auto start = std::chrono::steady_clock::now();
-    auto end = std::chrono::steady_clock::now();
-
-    if (std::chrono::duration_cast<std::chrono::seconds>(end - start) >=
-        std::chrono::seconds(1)) {
-            _lifeTime += -1;
-            start = std::chrono::steady_clock::now();
-        }
-    if (_lifeTime == 0)
-        _isAlive = false;
+    return _isAlive;
 }
 
 void Kitchen::startWork()
@@ -77,7 +68,9 @@ void Kitchen::startWork()
     _receive = std::thread(&Kitchen::receiveCookedPizza, this);
 
     while (_isAlive) {
-        //checkIsAlive(threads);
+        auto time = std::chrono::high_resolution_clock::now();
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(_clock - time).count() > 5)
+            _isAlive = false;
     }
     std::exit(0);
 }
