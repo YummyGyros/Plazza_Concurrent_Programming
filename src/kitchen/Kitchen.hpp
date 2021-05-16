@@ -22,7 +22,7 @@ class Kitchen {
         ~Kitchen();
 
         void startWork();
-        void checkIsAlive();
+        bool checkIsAlive();
 
         bool canCookPizza(const Pizza &pizza) const;
         void takePizzaInCharge(const Pizza &pizza);
@@ -58,7 +58,6 @@ class Kitchen {
         std::size_t _totalPizze;
 
         bool _isAlive;
-        int _lifeTime;
 
         std::thread _receive;
         std::unordered_map<Ingredients, std::size_t> _fridge;
