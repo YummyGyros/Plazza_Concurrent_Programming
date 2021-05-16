@@ -15,7 +15,7 @@ class Serializing {
         Serializing();
         ~Serializing();
 
-        pizza_order_t pack(Pizza pizza);
+        pizza_order_t pack(Pizza pizza, int myid);
         status_t pack(std::unordered_map<Ingredients, std::size_t> stock);
 
         Pizza unpack(pizza_order_t pizza);

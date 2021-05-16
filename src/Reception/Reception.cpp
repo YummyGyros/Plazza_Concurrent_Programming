@@ -177,7 +177,7 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
         _kitchens.push_back(std::move(k));
     }
     _kitchens.at(_kitchens.size() - 1)->takePizzaInCharge(pizza);
-    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza), _kitchens.at(_kitchens.size() - 1)->getMessageQueue().getMsgid());
+    _msg.sendMsg<pizza_order_t>(_srl.pack(pizza, _msg.getMsgid()), _kitchens.at(_kitchens.size() - 1)->getMessageQueue().getMsgid());
     std::cout <<"Order: " << pizza.getType() << " size " << pizza.getSize() << " sent to the kitchen." << std::endl;
 }
 
