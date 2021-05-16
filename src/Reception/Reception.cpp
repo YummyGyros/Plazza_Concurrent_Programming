@@ -200,7 +200,6 @@ void Reception::sendPizzaToKitchen(const Pizza &pizza)
         if (kitchen->getId().compare(ptrKitchen->getId()) == 0) {
             kitchen->takePizzaInCharge(pizza);
             _msg.sendMsg<pizza_order_t>(_srl.pack(pizza, _msg.getMsgid()), kitchen->getMessageQueue().getMsgid());
-            displayString("[sent]: " + pizza.getTypeStr() + " size " + pizza.getSizeStr() + " to Kitchen" + kitchen->getId());
         }
 }
 
