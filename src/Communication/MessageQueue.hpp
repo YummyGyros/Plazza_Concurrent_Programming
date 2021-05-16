@@ -22,6 +22,7 @@
 
 typedef struct pizza_order_s {
     long mtype;
+    int id;
     PizzaType type;
     PizzaSize size;
 } pizza_order_t;

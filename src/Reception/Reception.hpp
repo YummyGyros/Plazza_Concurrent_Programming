@@ -48,7 +48,7 @@ class Reception {
         std::string _shellLine;
 
         // KITCHENS Variables
-        std::vector<Kitchen> _kitchens;
+        std::vector<std::shared_ptr<Kitchen>> _kitchens;
         std::vector<std::vector<std::shared_ptr<Pizza>>> _orders;
         std::size_t _kitchensId;
         float _timeMultiplier;

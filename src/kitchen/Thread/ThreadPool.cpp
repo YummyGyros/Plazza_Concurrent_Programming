@@ -19,7 +19,7 @@ void ThreadPool::cook(SafeQueue<std::pair<PizzaType, PizzaSize>> &queue)
     while (true) {
         pizza = queue.pop();
         std::this_thread::sleep_for((std::chrono::milliseconds) (int)(_timeMultiplier * timeToCook.at(pizza.first)));
-        _msg.sendMsg<pizza_order_t>(_srl.pack(Pizza(pizza.first, pizza.second)), _receptionId);
+        _msg.sendMsg<pizza_order_t>(_srl.pack(Pizza(pizza.first, pizza.second), _msg.getMsgid()), _receptionId);
     }
 }
 
